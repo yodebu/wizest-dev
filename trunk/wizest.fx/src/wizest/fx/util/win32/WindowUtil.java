@@ -18,7 +18,15 @@ public class WindowUtil {
 	private static final Logger log = LogBroker.getLogger(WindowUtil.class
 			.getName());
 
-	public static void main(String[] args) throws InterruptedException {
+	private static void sleep(long ms) {
+		try {
+			Thread.sleep(ms); 
+		} catch (InterruptedException e) {
+			log.log(Level.WARNING, e.getMessage(), e);
+		}
+	}
+	
+	public static void main(String[] args)  {
 		// int hWnd = OS.FindWindowW(null, "KB투자증권 plustar\0".toCharArray());//
 		// 키보드보안실패
 		// int hWnd = OS.FindWindowW(null,
@@ -35,7 +43,7 @@ public class WindowUtil {
 		System.out.println(findWindowWithText("KB plustar", "PLUSTAR HTS"));
 		System.out.println(setForegroundWindowWithText("KB plustar",
 				"PLUSTAR HTS", 1000));
-		Thread.sleep(500);
+		sleep(500);
 
 	}
 
@@ -55,53 +63,49 @@ public class WindowUtil {
 
 		while (timeout > 0 && System.currentTimeMillis() < start + timeout
 				&& l.isEmpty()) {
-			try {
-				Thread.sleep(100); // wait 100 ms
-			} catch (InterruptedException e) {
-				log.log(Level.WARNING, e.getMessage(), e);
-				return 0;
-			}
+			sleep(100);
 			l = findWindowWithText(text, className);
 		}
 		if (!l.isEmpty()) {
-			OS.SetFocus(l.get(0));
-			OS.SetFocus(l.get(0));
-			OS.SetActiveWindow(l.get(0));
-			OS.SetActiveWindow(l.get(0));
-			OS.SetForegroundWindow(l.get(0));
-			OS.SetForegroundWindow(l.get(0));
+//			OS.ShowWindow(l.get(0), 1);
 			OS.ShowWindow(l.get(0), 1);
-			OS.ShowWindow(l.get(0), 1);
+			sleep(10);
+//			OS.SetActiveWindow(l.get(0));
+			OS.SetActiveWindow(l.get(0));
+			sleep(10);
+//			OS.SetForegroundWindow(l.get(0));
+			OS.SetForegroundWindow(l.get(0));
+			sleep(10);
+//			OS.SetFocus(l.get(0));
+			OS.SetFocus(l.get(0));
+			sleep(10);
 		}
 
 		return l.size();
 	}
 
-	public static int setFocusWithText(String text, String className,
-			long timeout) {
-		long start = System.currentTimeMillis();
-		List<Integer> l = findWindowWithText(text, className);
-
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout
-				&& l.isEmpty()) {
-			try {
-				Thread.sleep(100); // wait 100 ms
-			} catch (InterruptedException e) {
-				log.log(Level.WARNING, e.getMessage(), e);
-				return 0;
-			}
-			l = findWindowWithText(text, className);
-			// System.out.println(l.size());
-		}
-		if (!l.isEmpty()) {
-			OS.SetActiveWindow(l.get(0));
-			OS.SetActiveWindow(l.get(0));
-			OS.SetFocus(l.get(0));
-			OS.SetFocus(l.get(0));
-		}
-
-		return l.size();
-	}
+//		public static int setFocusWithText(String text, String className,
+//				long timeout) {
+//			long start = System.currentTimeMillis();
+//			List<Integer> l = findWindowWithText(text, className);
+//	
+//			while (timeout > 0 && System.currentTimeMillis() < start + timeout
+//					&& l.isEmpty()) {
+//				sleep(100);
+//				l = findWindowWithText(text, className);
+//				// System.out.println(l.size());
+//			}
+//			if (!l.isEmpty()) {
+//	//			OS.SetActiveWindow(l.get(0));
+//				OS.SetActiveWindow(l.get(0));
+//				sleep(10);
+//	//			OS.SetFocus(l.get(0));
+//				OS.SetFocus(l.get(0));
+//				sleep(10);
+//			}
+//	
+//			return l.size();
+//		}
 
 	public static List<Integer> findWindowWithText(String text, String className) {
 		text = text.toLowerCase();
@@ -130,9 +134,11 @@ public class WindowUtil {
 		for (int i : enumHWnd()) {
 			WindowInfo wi = new WindowInfo();
 			wi.hWnd = i;
+
 			char[] t = new char[100];
 			OS.GetWindowTextW(i, t, 100);
 			wi.text = new String(t).trim();
+
 			char[] t2 = new char[100];
 			OS.GetClassNameW(i, t2, 100);
 			wi.className = new String(t2).trim();
