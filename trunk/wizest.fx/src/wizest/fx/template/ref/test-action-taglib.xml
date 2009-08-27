@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="euc-kr"?> 
+<taglib> 
+	<short-name>example</short-name> 
+	<default-tag-name>ex2</default-tag-name> 
+	<default-page-tag-name>_page</default-page-tag-name>                
+	<inner-page-tag-name>_innerPage</inner-page-tag-name> 
+	<description>example</description> 
+	
+	<tag> 
+		<name>page</name>
+		<alias>_page,ex1</alias> 
+		<tag-class>wizest.fx.template.ref.Test1Tag</tag-class>                
+		<body-content>PAGE</body-content> 
+		<description></description> 
+	</tag> 
+	
+	<tag> 
+		<name>ex2</name> 
+		<tag-class>wizest.fx.template.ref.Test2Tag</tag-class> 
+		<body-content>EMPTY</body-content>                
+		<description></description> 
+		<default-attribute-name>attr1</default-attribute-name> 
+		<allow-unknown-attribute-name>false</allow-unknown-attribute-name>
+		<attribute> 
+			<name>attr1</name> 
+			<required>false</required> 
+			<type>java.lang.String</type> 
+			<rtexprvalue>false</rtexprvalue>
+			<description></description>                
+		</attribute> 
+	</tag> 
+	
+	<tag> 
+		<name>ex3</name> 
+		<tag-class>wizest.fx.template.ref.Test3Tag</tag-class> 
+		<body-content>ACTIONTAG</body-content> 
+		<description></description>                
+		<default-attribute-name>attr1</default-attribute-name> 
+		<allow-unknown-attribute-name>false</allow-unknown-attribute-name>
+		<attribute> 
+			<name>attr1</name> 
+			<required>false</required> 
+			<type>java.lang.String</type> 
+			<rtexprvalue>false</rtexprvalue>
+			<description></description> 
+		</attribute> 
+	</tag> 
+	
+	<tag>                
+		<name>ex4</name> 
+		<tag-class>wizest.fx.template.ref.Test4Tag</tag-class> 
+		<body-content>TAGDEPENDENT</body-content> 
+		<description></description> 
+		<default-attribute-name>attr1</default-attribute-name> 
+		<allow-unknown-attribute-name>false</allow-unknown-attribute-name>
+		<attribute>                
+			<name>attr1</name> 
+			<required>false</required> 
+			<type>java.lang.String</type> 
+			<rtexprvalue>false</rtexprvalue>
+			<description></description> 
+		</attribute> 
+	</tag> 
+	
+	<tag> 
+		<name>ex5</name> 
+		<alias>a</alias>
+		<tag-class>wizest.fx.template.ref.Test5Tag</tag-class>                
+		<body-content>ACTIONTAG</body-content> 
+		<description></description> 
+		<default-attribute-name>attr1</default-attribute-name> 
+		<allow-unknown-attribute-name>true</allow-unknown-attribute-name>
+		<attribute> 
+			<name>attr1</name> 
+			<required>false</required> 
+			<type>java.lang.String</type>   
+			<rtexprvalue>false</rtexprvalue>             
+			<description></description> 
+		</attribute> 
+		<attribute> 
+			<name>href</name> 
+			<required>false</required> 
+			<type>java.lang.String</type>   
+			<rtexprvalue>false</rtexprvalue>             
+			<description></description> 
+		</attribute> 		
+	</tag> 
+	
+</taglib>
