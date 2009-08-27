@@ -160,7 +160,7 @@ public class Macro {
 	}
 
 	public static synchronized boolean keyInputWin() {
-		return keyMultiInput(new int[] { 0x1FE0 });
+		return Macro.keyMultiInput(new int[] { SWT.CTRL, SWT.ESC });
 	}
 
 	// public void eval() {
@@ -171,11 +171,11 @@ public class Macro {
 	// }
 
 	public static void main(String[] args) {
-		
-//		keyInputString("1234abcdABCD");
-//		keyInputTab();
-//		keyInputEnter();
-//		keyInputAltF4();
+
+		// keyInputString("1234abcdABCD");
+		// keyInputTab();
+		// keyInputEnter();
+		// keyInputAltF4();
 		keyInputWin();
 	}
 }
