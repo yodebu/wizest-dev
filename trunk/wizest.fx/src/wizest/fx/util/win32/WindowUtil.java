@@ -7,13 +7,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.swt.internal.win32.OS;
+import org.eclipse.swt.internal.win32.RECT;
 
 import wizest.fx.logging.LogBroker;
 
 public class WindowUtil {
-//	private static final Logger log = Logger.getLogger(WindowUtil.class.getName());
-	private static final Logger log = LogBroker.getLogger(WindowUtil.class.getName());
-	
+
+	// private static final Logger log =
+	// Logger.getLogger(WindowUtil.class.getName());
+	private static final Logger log = LogBroker.getLogger(WindowUtil.class
+			.getName());
+
 	public static void main(String[] args) throws InterruptedException {
 		// int hWnd = OS.FindWindowW(null, "KB투자증권 plustar\0".toCharArray());//
 		// 키보드보안실패
@@ -29,7 +33,8 @@ public class WindowUtil {
 		// System.out.println(enumHWnd());
 		// System.out.println(enumWindowText());
 		System.out.println(findWindowWithText("KB plustar", "PLUSTAR HTS"));
-		System.out.println(setForegroundWindowWithText("KB plustar", "PLUSTAR HTS", 1000));
+		System.out.println(setForegroundWindowWithText("KB plustar",
+				"PLUSTAR HTS", 1000));
 		Thread.sleep(500);
 
 	}
@@ -43,11 +48,13 @@ public class WindowUtil {
 	 *            ms - 윈도우가 있을때까지 기다리는 시간 0이면 한번만 시도
 	 * @return text로 시작하는 윈도우의 수
 	 */
-	public static int setForegroundWindowWithText(String text, String className, long timeout) {
+	public static int setForegroundWindowWithText(String text,
+			String className, long timeout) {
 		long start = System.currentTimeMillis();
 		List<Integer> l = findWindowWithText(text, className);
 
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout && l.isEmpty()) {
+		while (timeout > 0 && System.currentTimeMillis() < start + timeout
+				&& l.isEmpty()) {
 			try {
 				Thread.sleep(100); // wait 100 ms
 			} catch (InterruptedException e) {
@@ -70,11 +77,13 @@ public class WindowUtil {
 		return l.size();
 	}
 
-	public static int setFocusWithText(String text, String className, long timeout) {
+	public static int setFocusWithText(String text, String className,
+			long timeout) {
 		long start = System.currentTimeMillis();
 		List<Integer> l = findWindowWithText(text, className);
 
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout && l.isEmpty()) {
+		while (timeout > 0 && System.currentTimeMillis() < start + timeout
+				&& l.isEmpty()) {
 			try {
 				Thread.sleep(100); // wait 100 ms
 			} catch (InterruptedException e) {
@@ -116,19 +125,48 @@ public class WindowUtil {
 		return l;
 	}
 
-	public static List<String> enumWindowText() {
-		ArrayList<String> sl = new ArrayList<String>();
+	public static List<WindowInfo> enumWindowInfo() {
+		ArrayList<WindowInfo> wl = new ArrayList<WindowInfo>();
 		for (int i : enumHWnd()) {
+			WindowInfo wi = new WindowInfo();
+			wi.hWnd = i;
 			char[] t = new char[100];
 			OS.GetWindowTextW(i, t, 100);
-			String s = new String(t).trim();
-			if (s.length() > 0) {
-				// System.out.println(s);
-				sl.add(s);
-			}
+			wi.text = new String(t).trim();
+			char[] t2 = new char[100];
+			OS.GetClassNameW(i, t2, 100);
+			wi.className = new String(t2).trim();
+
+			RECT rect = new RECT();
+			OS.GetWindowRect(i, rect);
+			wi.top = rect.top;
+			wi.bottom = rect.bottom;
+			wi.left = rect.left;
+			wi.right = rect.right;
+			wl.add(wi);
 		}
 		// System.out.println(sl);
-		return sl;
+		return wl;
+	}
+
+	public static List<WindowInfo> enumWindowInfo(String textFilter) {
+		return enumWindowInfo(textFilter, null);
+	}
+
+	public static List<WindowInfo> enumWindowInfo(String textFilter,
+			String classNameFilter) {
+		List<WindowInfo> l = new ArrayList<WindowInfo>();
+		for (WindowInfo i : enumWindowInfo()) {
+			if (i.text != null
+					&& i.text.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0)
+				if (classNameFilter == null)
+					l.add(i);
+				else if (i.className != null
+						&& i.className.toLowerCase().indexOf(
+								classNameFilter.toLowerCase()) >= 0)
+					l.add(i);
+		}
+		return l;
 	}
 
 	public static List<Integer> enumHWnd() {
@@ -149,4 +187,5 @@ public class WindowUtil {
 		}
 		return l;
 	}
+
 }
