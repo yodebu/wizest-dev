@@ -18,7 +18,7 @@ public class WindowUtil {
 	// Logger.getLogger(WindowUtil.class.getName());
 	private static final Logger log = LogBroker.getLogger(WindowUtil.class.getName());
 
-	private static void sleep(long ms) {
+	public static void sleep(long ms) {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
@@ -68,9 +68,17 @@ public class WindowUtil {
 			sleep(500);
 			
 			wi = enumWindowInfo("¹÷½º(").get(0);
+			System.out.println(wi);
 			Macro.mouseLClick(wi.left + 1, wi.top + 10);
 			Macro.keyChar('b');
 			sleep(500);
+		}
+		
+		long start = System.currentTimeMillis();
+		while(System.currentTimeMillis()-start <5000) {
+			WindowInfo wi = enumWindowInfo("¹÷½º(").get(0);
+			System.out.println(wi.text);
+			sleep(100);
 		}
 
 	}
