@@ -109,6 +109,12 @@ public class BugsMacro {
 		return Shell.filterFilename(title.substring(0, title.lastIndexOf("- ¹÷½º(")).trim());
 	}
 
+	public String getTitle() {
+		WindowInfo wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+		String title = wi.text;
+		return Shell.filterFilename(title.substring(0, title.lastIndexOf("- ¹÷½º(")).trim());
+	}
+
 	public static void main(String[] args) throws Exception {
 		BugsMacro m = new BugsMacro();
 

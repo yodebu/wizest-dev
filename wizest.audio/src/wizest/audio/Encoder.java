@@ -40,7 +40,7 @@ public class Encoder {
 			throw new UnsupportedAudioFileException("file type not supported: WAV");
 	}
 
-	public void encodeMP3(File wavFile, File mp3File) throws IOException {
+	public void encodeMP3(File wavFile, File mp3File, String title, String artist) throws IOException {
 		try {
 			log.info("mp3 encoding");
 
@@ -52,10 +52,17 @@ public class Encoder {
 			}
 
 			lame = new File(lame).getCanonicalFile().toString();
-			String cmd = lame + " -h -b 192 " + wavFile.getCanonicalFile() + " " + mp3File.getCanonicalFile();
+			String cmd = lame + " -h -b 192 \"" + wavFile.getCanonicalFile() + "\" \"" + mp3File.getCanonicalFile() + "\"";
+			if (title != null && title.length() > 0)
+				cmd += " --tt \"" + title + "\"";
+			if (artist != null && artist.length() > 0)
+				cmd += " --ta \"" + artist + "\"";
+
 			Runtime rt = Runtime.getRuntime();
 			log.info(cmd);
-			rt.exec(cmd);
+			Process p = rt.exec(cmd);
+			// int exitValue = p.waitFor();
+			// log.info("Lame exits with exitValue=" + exitValue);
 			log.info("mp3 encoded");
 		} catch (IOException e) {
 			throw e;
@@ -85,6 +92,6 @@ public class Encoder {
 		en.encodeWAV(new ByteArrayInputStream(audio), fos, audio.length);
 
 		fos = new FileOutputStream("C:/temp/audio.mp3");
-		en.encodeMP3(new File("C:/temp/audio.wav"), new File("C:/temp/audio.mp3"));
+		en.encodeMP3(new File("C:/temp/audio.wav"), new File("C:/temp/audio.mp3"), null, null);
 	}
 }
