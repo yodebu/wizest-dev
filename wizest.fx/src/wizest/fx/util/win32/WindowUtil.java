@@ -6,6 +6,7 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.internal.win32.RECT;
 
@@ -15,18 +16,17 @@ public class WindowUtil {
 
 	// private static final Logger log =
 	// Logger.getLogger(WindowUtil.class.getName());
-	private static final Logger log = LogBroker.getLogger(WindowUtil.class
-			.getName());
+	private static final Logger log = LogBroker.getLogger(WindowUtil.class.getName());
 
 	private static void sleep(long ms) {
 		try {
-			Thread.sleep(ms); 
+			Thread.sleep(ms);
 		} catch (InterruptedException e) {
 			log.log(Level.WARNING, e.getMessage(), e);
 		}
 	}
-	
-	public static void main(String[] args)  {
+
+	public static void main(String[] args) {
 		// int hWnd = OS.FindWindowW(null, "KB투자증권 plustar\0".toCharArray());//
 		// 키보드보안실패
 		// int hWnd = OS.FindWindowW(null,
@@ -40,10 +40,38 @@ public class WindowUtil {
 
 		// System.out.println(enumHWnd());
 		// System.out.println(enumWindowText());
-		System.out.println(findWindowWithText("KB plustar", "PLUSTAR HTS"));
-		System.out.println(setForegroundWindowWithText("KB plustar",
-				"PLUSTAR HTS", 1000));
-		sleep(500);
+
+		// System.out.println(findWindowWithText("KB plustar", "PLUSTAR HTS"));
+		// System.out.println(setForegroundWindowWithText("KB plustar",
+		// "PLUSTAR HTS", 1000));
+		// sleep(500);
+
+		for (int i = 0; i < 1; i++) {
+			setForegroundWindowWithText("Lyrics", null, 0);
+			WindowInfo wi = enumWindowInfo("벅스(").get(0);
+			
+			Macro.mouseLClick(wi.left+160, wi.top+145);
+
+			wi = enumWindowInfo("Lyrics").get(1);
+
+			
+			System.out.println(Macro.mouseRClick(wi.left, wi.top));
+			Macro.keyInputs(new int[] { SWT.ARROW_DOWN, SWT.ARROW_DOWN });
+			Macro.keyInputEnter();
+
+			
+			System.out.println(Macro.mouseRClick(wi.left, wi.top));
+			Macro.keyInputs(new int[] { SWT.ARROW_DOWN });
+			Macro.keyInputEnter();
+		
+			System.out.println(SimpleClipboard.fromClipboard());
+			sleep(500);
+			
+			wi = enumWindowInfo("벅스(").get(0);
+			Macro.mouseLClick(wi.left + 1, wi.top + 10);
+			Macro.keyChar('b');
+			sleep(500);
+		}
 
 	}
 
@@ -56,56 +84,53 @@ public class WindowUtil {
 	 *            ms - 윈도우가 있을때까지 기다리는 시간 0이면 한번만 시도
 	 * @return text로 시작하는 윈도우의 수
 	 */
-	public static int setForegroundWindowWithText(String text,
-			String className, long timeout) {
+	public static int setForegroundWindowWithText(String text, String className, long timeout) {
 		long start = System.currentTimeMillis();
 		List<Integer> l = findWindowWithText(text, className);
 
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout
-				&& l.isEmpty()) {
+		while (timeout > 0 && System.currentTimeMillis() < start + timeout && l.isEmpty()) {
 			sleep(100);
 			l = findWindowWithText(text, className);
 		}
-		if (!l.isEmpty()) {
-//			OS.ShowWindow(l.get(0), 1);
-			OS.ShowWindow(l.get(0), 1);
-			sleep(10);
-//			OS.SetActiveWindow(l.get(0));
-			OS.SetActiveWindow(l.get(0));
-			sleep(10);
-//			OS.SetForegroundWindow(l.get(0));
-			OS.SetForegroundWindow(l.get(0));
-			sleep(10);
-//			OS.SetFocus(l.get(0));
-			OS.SetFocus(l.get(0));
-			sleep(10);
-		}
+		if (!l.isEmpty())
+			setForegroundWindow(l.get(0));
 
 		return l.size();
 	}
 
-//		public static int setFocusWithText(String text, String className,
-//				long timeout) {
-//			long start = System.currentTimeMillis();
-//			List<Integer> l = findWindowWithText(text, className);
-//	
-//			while (timeout > 0 && System.currentTimeMillis() < start + timeout
-//					&& l.isEmpty()) {
-//				sleep(100);
-//				l = findWindowWithText(text, className);
-//				// System.out.println(l.size());
-//			}
-//			if (!l.isEmpty()) {
-//	//			OS.SetActiveWindow(l.get(0));
-//				OS.SetActiveWindow(l.get(0));
-//				sleep(10);
-//	//			OS.SetFocus(l.get(0));
-//				OS.SetFocus(l.get(0));
-//				sleep(10);
-//			}
-//	
-//			return l.size();
-//		}
+	public static void setForegroundWindow(int hWnd) {
+		OS.ShowWindow(hWnd, 1);
+		sleep(10);
+		OS.SetActiveWindow(hWnd);
+		sleep(10);
+		OS.SetForegroundWindow(hWnd);
+		sleep(10);
+		OS.SetFocus(hWnd);
+		sleep(10);
+	}
+
+	// public static int setFocusWithText(String text, String className,
+	// long timeout) {
+	// long start = System.currentTimeMillis();
+	// List<Integer> l = findWindowWithText(text, className);
+	//	
+	// while (timeout > 0 && System.currentTimeMillis() < start + timeout
+	// && l.isEmpty()) {
+	// sleep(100);
+	// l = findWindowWithText(text, className);
+	// // System.out.println(l.size());
+	// }
+	// if (!l.isEmpty()) {
+	// // OS.SetActiveWindow(l.get(0));
+	// OS.SetActiveWindow(l.get(0));
+	// sleep(10);
+	// // OS.SetFocus(l.get(0));
+	// OS.SetFocus(l.get(0));
+	// sleep(10);
+	// }
+	//	
+	// return l.size();
+	// }
 
 	public static List<Integer> findWindowWithText(String text, String className) {
 		text = text.toLowerCase();
@@ -159,17 +184,13 @@ public class WindowUtil {
 		return enumWindowInfo(textFilter, null);
 	}
 
-	public static List<WindowInfo> enumWindowInfo(String textFilter,
-			String classNameFilter) {
+	public static List<WindowInfo> enumWindowInfo(String textFilter, String classNameFilter) {
 		List<WindowInfo> l = new ArrayList<WindowInfo>();
 		for (WindowInfo i : enumWindowInfo()) {
-			if (i.text != null
-					&& i.text.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0)
+			if (i.text != null && i.text.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0)
 				if (classNameFilter == null)
 					l.add(i);
-				else if (i.className != null
-						&& i.className.toLowerCase().indexOf(
-								classNameFilter.toLowerCase()) >= 0)
+				else if (i.className != null && i.className.toLowerCase().indexOf(classNameFilter.toLowerCase()) >= 0)
 					l.add(i);
 		}
 		return l;

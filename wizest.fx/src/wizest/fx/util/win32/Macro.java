@@ -142,6 +142,35 @@ public class Macro {
 		}
 		return true;
 	}
+	
+	
+	/**
+	 * ctrl-c °°Àº °Í
+	 * @param KEYCODE
+	 * @param CHARACTER
+	 * @return
+	 */
+	public static synchronized boolean keyMultiInput(int KEYCODE, char CHARACTER) {
+		Event e = new Event();
+		e.type = SWT.KeyDown;
+		e.keyCode = KEYCODE;
+
+		Event e2 = new Event();
+		e2.type = SWT.KeyDown;
+		e2.character = CHARACTER;
+
+		if (Win32SendInput.post(e) && Win32SendInput.post(e2)) {
+			e.type = SWT.KeyUp;
+			e.keyCode = KEYCODE;
+			
+			e2.type = SWT.KeyUp;
+			e2.character = CHARACTER;
+
+			return Win32SendInput.post(e2) && Win32SendInput.post(e);
+		}
+
+		return false;
+	}
 
 	public static synchronized boolean keyInputESC() {
 		return keyInput(SWT.ESC);
