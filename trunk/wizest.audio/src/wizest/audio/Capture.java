@@ -88,7 +88,6 @@ public class Capture {
 				log.info("capture stopped.");
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
