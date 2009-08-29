@@ -10,123 +10,124 @@ import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
+public class Shell {
+	public static boolean move(File source, File target) throws IOException {
+		// target = new File (target, source.getName());
+		return rename(source, target);
+	}
 
+	public static boolean rename(File source, File target) throws IOException {
+		if (source.exists()) {
+			source = source.getCanonicalFile();
 
-public class Shell
-{
-    public static boolean move(File source,File target) throws IOException
-    {
-        //target = new File (target, source.getName());
-        return rename(source,target);
-    }
+			File parent = target.getParentFile();
+			if (parent != null && !parent.exists())
+				parent.mkdirs();
 
-    public static boolean rename(File source,File target) throws IOException
-    {
-        if(source.exists())
-        {
-            source=source.getCanonicalFile();
+			return source.renameTo(target);
+		} else {
+			return false;
+		}
+	}
 
-            File parent=target.getParentFile();
-            if(parent != null && !parent.exists())
-                parent.mkdirs();
+	public static void copy(File source, File target) throws IOException {
+		source = source.getCanonicalFile();
 
-            return source.renameTo(target);
-        }
-        else
-        {
-        	return false;
-        }
-    }
+		if (source.isDirectory()) {
+			if (target.exists() && !target.isDirectory())
+				throw new IOException("the target is not a directory.");
 
-    public static void copy(File source,File target) throws IOException
-    {
-        source = source.getCanonicalFile();
+			String sPath = null;
+			try {
+				sPath = source.getParentFile().getAbsolutePath();
+			} catch (Exception ex) {
+				sPath = source.getAbsolutePath();
+			}
+			int sPathLength = sPath.length();
 
-        if (source.isDirectory())           {
-            if (target.exists() && !target.isDirectory())
-                throw new IOException("the target is not a directory.");
+			Stack s = new Stack();
+			File src = source;
+			s.push(src);
+			while (!s.empty()) {
+				src = (File) s.pop();
+				if (src.isDirectory()) {
+					File[] fs = src.listFiles();
+					for (int i = 0, length = fs.length; i < length; ++i) {
+						s.push(fs[i]);
+					}
+				} else {
+					File dst = new File(target, src.getAbsolutePath().substring(sPathLength));
+					copyFile(src, dst);
+				}
+			}
+		} else {
+			copyFile(source, target);
+		}
+	}
 
-            String sPath=null;
-            try {
-                sPath=source.getParentFile().getAbsolutePath();
-            }
-            catch(Exception ex) {
-                sPath=source.getAbsolutePath();
-            }
-            int sPathLength=sPath.length();
+	private static void copyFile(File source, File target) throws IOException {
+		if (!source.isFile())
+			throw new IOException("the source is not a file.");
 
-            Stack s=new Stack();
-            File src=source;
-            s.push(src);
-            while(!s.empty()) {
-                src=(File)s.pop();
-                if(src.isDirectory()) {
-                    File[] fs=src.listFiles();
-                    for(int i=0,length=fs.length;i < length;++i) {
-                        s.push(fs[i]);
-                    }
-                }
-                else {
-                    File dst = new File(target,src.getAbsolutePath().substring(sPathLength));
-                    copyFile(src,dst);
-                }
-            }
-        }
-        else        {
-            copyFile(source,target);
-        }
-    }
+		if (!target.getParentFile().exists()) {
+			target.getParentFile().mkdirs();
+		}
 
-    private static void copyFile(File source,File target) throws IOException
-    {
-        if (!source.isFile())
-            throw new IOException("the source is not a file.");
+		if (!target.exists())
+			target.createNewFile();
 
-        if (!target.getParentFile().exists())   {
-            target.getParentFile().mkdirs();
-        }
+		FileInputStream in = new FileInputStream(source);
+		FileOutputStream out = new FileOutputStream(target);
+		FileChannel fc = in.getChannel();
+		FileChannel fc2 = out.getChannel();
 
-        if (!target.exists())
-            target.createNewFile();
+		ByteBuffer buff = ByteBuffer.allocateDirect(4096);
+		while (fc.read(buff) >= 0) {
+			buff.flip();
+			fc2.write(buff);
+			buff.clear();
+		}
 
-        FileInputStream in = new FileInputStream(source);
-        FileOutputStream out = new FileOutputStream(target);
-        FileChannel fc = in.getChannel();
-        FileChannel fc2 = out.getChannel();
+		in.close();
+		out.close();
+	}
 
-        ByteBuffer buff = ByteBuffer.allocateDirect(4096);
-        while(fc.read(buff) >= 0)   {
-            buff.flip();
-            fc2.write(buff);
-            buff.clear();
-        }
+	/**
+	 * 디렉토리를 선택하면 하위 디렉토리까지 모두 삭제
+	 * 
+	 * @param target
+	 *            File
+	 */
+	public static void remove(File target) {
+		if (!target.isDirectory())
+			target.delete();
+		else {
+			Stack s = new Stack();
+			s.addAll(Arrays.asList(target.listFiles()));
 
-        in.close();
-        out.close();
-    }
+			while (true) {
+				try {
+					remove((File) s.pop());
+				} catch (EmptyStackException ex) {
+					break;
+				}
+			}
+			target.delete();
+		}
+	}
 
-    /**
-     * 디렉토리를 선택하면 하위 디렉토리까지 모두 삭제
-     * @param target File
-     */
-    public static void remove(File target)
-    {
-        if (!target.isDirectory())
-            target.delete();
-        else {
-            Stack s = new Stack();
-            s.addAll(Arrays.asList(target.listFiles()));
-
-            while (true){
-                try {
-                    remove((File)s.pop());
-                }
-                catch(EmptyStackException ex) {
-                    break;
-                }
-            }
-            target.delete();
-        }
-    }
+	public static String filterFilename(String s) {
+		// filter \ / : * ? " < > |
+		s = s.replace("\\", " ");
+		s = s.replace("/", " ");
+		s = s.replace(":", " ");
+		s = s.replace("*", " ");
+		s = s.replace("?", " ");
+		s = s.replace("\"", " ");
+		s = s.replace("<", " ");
+		s = s.replace(">", " ");
+		s = s.replace("|", " ");
+		return s;
+	}
 
 }
