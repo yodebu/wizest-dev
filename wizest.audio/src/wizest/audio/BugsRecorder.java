@@ -3,6 +3,7 @@ package wizest.audio;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,6 +14,7 @@ import javax.sound.sampled.LineUnavailableException;
 
 import wizest.fx.pool.ThreadPool;
 import wizest.fx.util.StackTrace;
+import wizest.fx.util.StreamUtils;
 
 public class BugsRecorder {
 	private long timeout;
@@ -89,15 +91,21 @@ public class BugsRecorder {
 		}
 	}
 
-	void recordASong() throws LineUnavailableException, TimeoutException, IOException {
+	private void recordASong() throws LineUnavailableException, TimeoutException, IOException {
 		Capture ac = new Capture();
 
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
+		final File fTmp = new File(root, System.currentTimeMillis() + ".tmp");
+		log.info(fTmp + " created");
+
+		FileOutputStream os = new FileOutputStream(fTmp);
+		// final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ac.start(os);
 		final String title = macro.getTitle();
 		// final String lyrics = macro.getLyrics();
 		macro.waitForNextSong(timeout);
 		ac.stop();
+		os.flush();
+		os.close();
 
 		Runnable r = new Runnable() {
 			public void run() {
@@ -113,10 +121,13 @@ public class BugsRecorder {
 					fWav.createNewFile();
 					log.info(fWav + " created");
 					OutputStream fos = new FileOutputStream(fWav);
-					byte[] audio = os.toByteArray();
-					en.encodeWAV(new ByteArrayInputStream(audio), fos, audio.length);
+
+					FileInputStream fin = new FileInputStream(fTmp);
+					en.encodeWAV(fin, fos, fTmp.length());
 					fos.flush();
 					fos.close();
+
+					fTmp.delete();
 
 					// MP3
 					File fMp3 = new File(root, prefix + title + ".mp3").getCanonicalFile();

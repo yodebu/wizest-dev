@@ -28,7 +28,7 @@ public class Encoder {
 		final AudioFormat format = Capture.getFormat();
 		final AudioInputStream ais = new AudioInputStream(is, format, length / format.getFrameSize());
 
-		ais.reset(); // rewind
+//		ais.reset(); // rewind
 
 		if (AudioSystem.isFileTypeSupported(AudioFileFormat.Type.WAVE, ais)) {
 			log.info("wav encoding");
