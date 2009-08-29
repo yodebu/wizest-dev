@@ -23,7 +23,7 @@ public class BugsMacro {
 		this.log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	}
 
-	void play() {
+	void _play() {
 		for (int i = 0; i < 1; i++) {
 			WindowUtil.setForegroundWindowWithText("Lyrics", null, 0);
 			WindowInfo wi = WindowUtil.enumWindowInfo("벅스(").get(0);
@@ -52,6 +52,10 @@ public class BugsMacro {
 
 	}
 
+	public boolean existsBugsPlayer() {
+		return !WindowUtil.findWindowWithText("벅스(", "Afx:00400000:8").isEmpty();
+	}
+
 	public String getLyrics() {
 		WindowUtil.setForegroundWindowWithText("벅스(", null, 0);
 		WindowInfo wi = WindowUtil.enumWindowInfo("벅스(").get(0);
@@ -71,20 +75,21 @@ public class BugsMacro {
 		return SimpleClipboard.fromClipboard();
 	}
 
+	// public String convertLyricsTextToLRC(String lyrics) {
+	// return lyrics;
+	// }
+
 	/**
 	 * 다음 곡으로 변경될 때까지 기다림 (윈도우 제목 변경을 모니터링)
 	 * 
 	 * @param timeoutMs
 	 * @return title for filename
 	 */
-	public String waitForNewTitle(long timeoutMs) throws TimeoutException {
+	public String waitForNextSong(long timeoutMs) throws TimeoutException {
 		WindowInfo wi = WindowUtil.enumWindowInfo("벅스(").get(0);
 		String title = wi.text;
 		WAIT: {
 			try {
-				// monitor window's text -> catch the timing of going to the
-				// next
-				// song.
 				long start = System.currentTimeMillis();
 				while (System.currentTimeMillis() - start < timeoutMs) {
 					wi = WindowUtil.enumWindowInfo("벅스(").get(0);
@@ -106,24 +111,26 @@ public class BugsMacro {
 
 	public static void main(String[] args) throws Exception {
 		BugsMacro m = new BugsMacro();
-		// m.play();
-		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+
+		System.out.println(m.existsBugsPlayer());
 
 		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
 
 		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
 
 		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
 
 		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
 
 		System.out.println(m.getLyrics());
-		System.out.println(m.waitForNewTitle(5 * 60000)); // 5 min
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
+
+		System.out.println(m.getLyrics());
+		System.out.println(m.waitForNextSong(5 * 60000)); // 5 min
 
 	}
 }
