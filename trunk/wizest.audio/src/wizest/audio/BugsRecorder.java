@@ -1,7 +1,5 @@
 package wizest.audio;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +12,6 @@ import javax.sound.sampled.LineUnavailableException;
 
 import wizest.fx.pool.ThreadPool;
 import wizest.fx.util.StackTrace;
-import wizest.fx.util.StreamUtils;
 
 public class BugsRecorder {
 	private long timeout;
@@ -50,7 +47,7 @@ public class BugsRecorder {
 				if (s.startsWith("-h"))
 					printHelp();
 				else if (s.startsWith("-t"))
-					Long.parseLong(s.substring(2));
+					timeout = Long.parseLong(s.substring(2));
 				else if (s.startsWith("-o"))
 					workDir = s.substring(2);
 				else if (s.startsWith("-p"))
