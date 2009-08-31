@@ -60,6 +60,7 @@ public class BugsRecorder {
 		if (!root.isDirectory())
 			throw new IOException("Work directory is not a directory.");
 
+
 		System.out.println("Timeout per a song: " + timeout / 1000. / 60. + " min");
 
 		BugsRecorder bugs = new BugsRecorder(timeout, root, prefix);
@@ -81,6 +82,8 @@ public class BugsRecorder {
 	}
 
 	private void recordSongs() throws LineUnavailableException, IOException {
+		if(!macro.existsBugsPlayer())
+			throw new IOException("does not exist a running bugsplayer.");
 		try {
 			for (;;)
 				recordASong();
