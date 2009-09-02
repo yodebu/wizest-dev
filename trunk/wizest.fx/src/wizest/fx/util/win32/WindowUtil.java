@@ -80,11 +80,11 @@ public class WindowUtil {
 		// sleep(100);
 		// }
 
-		// for (WindowInfo i : enumWindowInfoByText("벅스"))
-		// System.out.println(i);
-
-		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("벅스", "afx")), ""))
+		for (WindowInfo i : enumWindowInfoByTextClassName("","systree"))
 			System.out.println(i);
+
+//		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("벅스", "afx")), ""))
+//			System.out.println(i);
 
 	}
 
@@ -168,7 +168,8 @@ public class WindowUtil {
 
 	/**
 	 * @param text
-	 * @param className 	null if unknown
+	 * @param className
+	 *            null if unknown
 	 * @return 첫번째 찾은 것, 검색 실패시 음수
 	 */
 	public static int findHWnd(String text, String className) {
