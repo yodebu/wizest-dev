@@ -25,12 +25,12 @@ public class BugsMacro {
 
 	void _play() {
 		for (int i = 0; i < 1; i++) {
-			WindowUtil.setForegroundWindowWithText("Lyrics", null, 0);
-			WindowInfo wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+			WindowUtil.setForegroundWindow(WindowUtil.findHWnd("Lyrics", null));
+			WindowInfo wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 
 			Macro.mouseLClick(wi.left + 160, wi.top + 145);
 
-			wi = WindowUtil.enumWindowInfo("Lyrics").get(1);
+			wi = WindowUtil.enumWindowInfoByText("Lyrics").get(1);
 
 			Macro.mouseRClick(wi.left, wi.top);
 			Macro.keyInputs(new int[] { SWT.ARROW_DOWN, SWT.ARROW_DOWN });
@@ -43,7 +43,7 @@ public class BugsMacro {
 			System.out.println(SimpleClipboard.fromClipboard());
 			WindowUtil.sleep(500);
 
-			wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+			wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 			System.out.println(wi);
 			Macro.mouseLClick(wi.left + 1, wi.top + 10);
 			Macro.keyChar('b');
@@ -53,16 +53,16 @@ public class BugsMacro {
 	}
 
 	public boolean existsBugsPlayer() {
-		return !WindowUtil.findWindowWithText("¹÷½º(", "Afx:00400000:8").isEmpty();
+		return WindowUtil.findHWnd("¹÷½º(", "Afx:00400000:8") >= 0;
 	}
 
 	public String getLyrics() {
-		WindowUtil.setForegroundWindowWithText("¹÷½º(", null, 0);
-		WindowInfo wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+		WindowUtil.setForegroundWindowByText("¹÷½º(", null, 0);
+		WindowInfo wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 
 		Macro.mouseLClick(wi.left + 160, wi.top + 145);
 
-		wi = WindowUtil.enumWindowInfo("Lyrics").get(1);
+		wi = WindowUtil.enumWindowInfoByText("Lyrics").get(1);
 		Macro.mouseRClick(wi.left, wi.top);
 		Macro.keyInputs(new int[] { SWT.ARROW_DOWN, SWT.ARROW_DOWN });
 		Macro.keyInputEnter();
@@ -86,13 +86,13 @@ public class BugsMacro {
 	 * @return title for filename
 	 */
 	public String waitForNextSong(long timeoutMs) throws TimeoutException {
-		WindowInfo wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+		WindowInfo wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 		String title = wi.text;
 		WAIT: {
 			try {
 				long start = System.currentTimeMillis();
 				while (System.currentTimeMillis() - start < timeoutMs) {
-					wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+					wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 					if (!title.equals(wi.text)) {
 						title = wi.text;
 						break WAIT;
@@ -110,7 +110,7 @@ public class BugsMacro {
 	}
 
 	public String getTitle() {
-		WindowInfo wi = WindowUtil.enumWindowInfo("¹÷½º(").get(0);
+		WindowInfo wi = WindowUtil.enumWindowInfoByText("¹÷½º(").get(0);
 		String title = wi.text;
 		return Shell.filterFilename(title.substring(0, title.lastIndexOf("- ¹÷½º(")).trim());
 	}

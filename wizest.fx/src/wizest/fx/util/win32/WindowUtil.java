@@ -1,12 +1,13 @@
 package wizest.fx.util.win32;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.internal.win32.RECT;
 
@@ -46,64 +47,67 @@ public class WindowUtil {
 		// "PLUSTAR HTS", 1000));
 		// sleep(500);
 
-		for (int i = 0; i < 1; i++) {
-			setForegroundWindowWithText("Lyrics", null, 0);
-			WindowInfo wi = enumWindowInfo("벅스(").get(0);
-			
-			Macro.mouseLClick(wi.left+160, wi.top+145);
+		// for (int i = 0; i < 1; i++) {
+		// setForegroundWindowWithText("Lyrics", null, 0);
+		// WindowInfo wi = enumWindowInfo("벅스(").get(0);
+		//
+		// Macro.mouseLClick(wi.left + 160, wi.top + 145);
+		//
+		// wi = enumWindowInfo("Lyrics").get(1);
+		//
+		// System.out.println(Macro.mouseRClick(wi.left, wi.top));
+		// Macro.keyInputs(new int[] { SWT.ARROW_DOWN, SWT.ARROW_DOWN });
+		// Macro.keyInputEnter();
+		//
+		// System.out.println(Macro.mouseRClick(wi.left, wi.top));
+		// Macro.keyInputs(new int[] { SWT.ARROW_DOWN });
+		// Macro.keyInputEnter();
+		//
+		// System.out.println(SimpleClipboard.fromClipboard());
+		// sleep(500);
+		//
+		// wi = enumWindowInfo("벅스(").get(0);
+		// System.out.println(wi);
+		// Macro.mouseLClick(wi.left + 1, wi.top + 10);
+		// Macro.keyChar('b');
+		// sleep(500);
+		// }
 
-			wi = enumWindowInfo("Lyrics").get(1);
+		// long start = System.currentTimeMillis();
+		// while(System.currentTimeMillis()-start <5000) {
+		// WindowInfo wi = enumWindowInfo("벅스(").get(0);
+		// System.out.println(wi.text);
+		// sleep(100);
+		// }
 
-			
-			System.out.println(Macro.mouseRClick(wi.left, wi.top));
-			Macro.keyInputs(new int[] { SWT.ARROW_DOWN, SWT.ARROW_DOWN });
-			Macro.keyInputEnter();
+		// for (WindowInfo i : enumWindowInfoByText("벅스"))
+		// System.out.println(i);
 
-			
-			System.out.println(Macro.mouseRClick(wi.left, wi.top));
-			Macro.keyInputs(new int[] { SWT.ARROW_DOWN });
-			Macro.keyInputEnter();
-		
-			System.out.println(SimpleClipboard.fromClipboard());
-			sleep(500);
-			
-			wi = enumWindowInfo("벅스(").get(0);
-			System.out.println(wi);
-			Macro.mouseLClick(wi.left + 1, wi.top + 10);
-			Macro.keyChar('b');
-			sleep(500);
-		}
-		
-		long start = System.currentTimeMillis();
-		while(System.currentTimeMillis()-start <5000) {
-			WindowInfo wi = enumWindowInfo("벅스(").get(0);
-			System.out.println(wi.text);
-			sleep(100);
-		}
+		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("벅스", "afx")), ""))
+			System.out.println(i);
 
 	}
 
 	/**
 	 * @param text
 	 *            윈도우 제목 / 윈도우가 여러개면 첫번째 것
-	 * @param className
+	 * @param classNameb
 	 *            윈도우 클래스 이름
 	 * @param timeout
 	 *            ms - 윈도우가 있을때까지 기다리는 시간 0이면 한번만 시도
-	 * @return text로 시작하는 윈도우의 수
+	 * @return foreground 된 hWnd
 	 */
-	public static int setForegroundWindowWithText(String text, String className, long timeout) {
+	public static int setForegroundWindowByText(String text, String className, long timeout) {
 		long start = System.currentTimeMillis();
-		List<Integer> l = findWindowWithText(text, className);
+		int hWnd = findHWnd(text, className);
 
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout && l.isEmpty()) {
+		while (timeout > 0 && System.currentTimeMillis() < start + timeout && hWnd < 0) {
 			sleep(100);
-			l = findWindowWithText(text, className);
+			hWnd = findHWnd(text, className);
 		}
-		if (!l.isEmpty())
-			setForegroundWindow(l.get(0));
-
-		return l.size();
+		if (hWnd >= 0)
+			setForegroundWindow(hWnd);
+		return hWnd;
 	}
 
 	public static void setForegroundWindow(int hWnd) {
@@ -140,26 +144,74 @@ public class WindowUtil {
 	// return l.size();
 	// }
 
-	public static List<Integer> findWindowWithText(String text, String className) {
+	// public static List<Integer> findWindow(String text, String className) {
+	// text = text.toLowerCase();
+	// ArrayList<Integer> l = new ArrayList<Integer>();
+	// for (int h : enumHWnd()) {
+	// char[] t = new char[100];
+	// OS.GetWindowTextW(h, t, 100);
+	// String s = new String(t).trim().toLowerCase();
+	// if (s.indexOf(text) >= 0) {
+	// if (className == null)
+	// l.add(h);
+	// else {
+	// char[] t2 = new char[100];
+	// OS.GetClassNameW(h, t2, 100);
+	// String s2 = new String(t2).trim().toLowerCase();
+	// if (s2.indexOf(className.toLowerCase()) >= 0)
+	// l.add(h);
+	// }
+	// }
+	// }
+	// return l;
+	// }
+
+	/**
+	 * @param text
+	 * @param className 	null if unknown
+	 * @return 첫번째 찾은 것, 검색 실패시 음수
+	 */
+	public static int findHWnd(String text, String className) {
 		text = text.toLowerCase();
-		ArrayList<Integer> l = new ArrayList<Integer>();
 		for (int h : enumHWnd()) {
 			char[] t = new char[100];
 			OS.GetWindowTextW(h, t, 100);
 			String s = new String(t).trim().toLowerCase();
 			if (s.indexOf(text) >= 0) {
 				if (className == null)
-					l.add(h);
+					return h;
 				else {
 					char[] t2 = new char[100];
 					OS.GetClassNameW(h, t2, 100);
 					String s2 = new String(t2).trim().toLowerCase();
 					if (s2.indexOf(className.toLowerCase()) >= 0)
-						l.add(h);
+						return h;
 				}
 			}
 		}
-		return l;
+		return -1;
+	}
+
+	public static List<WindowInfo> enumWindowInfoByAncestor(int hAncestorWnd) {
+		Set<WindowInfo> s = new HashSet<WindowInfo>();
+		for (WindowInfo i : enumWindowInfo()) {
+			int p = i.hWnd;
+			while (p > 0)
+				if ((p = OS.GetParent(p)) == hAncestorWnd) {
+					s.add(i);
+					break;
+				}
+		}
+		return new ArrayList<WindowInfo>(s);
+	}
+
+	public static List<WindowInfo> enumWindowInfoByParent(int hParentWnd) {
+		Set<WindowInfo> s = new HashSet<WindowInfo>();
+		for (WindowInfo i : enumWindowInfo()) {
+			if (OS.GetParent(i.hWnd) == hParentWnd)
+				s.add(i);
+		}
+		return new ArrayList<WindowInfo>(s);
 	}
 
 	public static List<WindowInfo> enumWindowInfo() {
@@ -188,18 +240,28 @@ public class WindowUtil {
 		return wl;
 	}
 
-	public static List<WindowInfo> enumWindowInfo(String textFilter) {
-		return enumWindowInfo(textFilter, null);
+	public static List<WindowInfo> enumWindowInfoByText(String text) {
+		return filterWindowInfoByText(enumWindowInfo(), text);
 	}
 
-	public static List<WindowInfo> enumWindowInfo(String textFilter, String classNameFilter) {
+	public static List<WindowInfo> enumWindowInfoByTextClassName(String text, String className) {
+		return filterWindowInfoByClassName(filterWindowInfoByText(enumWindowInfo(), text), className);
+	}
+
+	public static List<WindowInfo> filterWindowInfoByText(List<WindowInfo> list, String text) {
 		List<WindowInfo> l = new ArrayList<WindowInfo>();
-		for (WindowInfo i : enumWindowInfo()) {
-			if (i.text != null && i.text.toLowerCase().indexOf(textFilter.toLowerCase()) >= 0)
-				if (classNameFilter == null)
-					l.add(i);
-				else if (i.className != null && i.className.toLowerCase().indexOf(classNameFilter.toLowerCase()) >= 0)
-					l.add(i);
+		for (WindowInfo i : list) {
+			if (i.text != null && i.text.toLowerCase().indexOf(text.toLowerCase()) >= 0)
+				l.add(i);
+		}
+		return l;
+	}
+
+	public static List<WindowInfo> filterWindowInfoByClassName(List<WindowInfo> list, String classNameFilter) {
+		List<WindowInfo> l = new ArrayList<WindowInfo>();
+		for (WindowInfo i : list) {
+			if (i.className != null && i.className.toLowerCase().indexOf(classNameFilter.toLowerCase()) >= 0)
+				l.add(i);
 		}
 		return l;
 	}
