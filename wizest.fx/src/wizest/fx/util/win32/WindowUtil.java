@@ -8,8 +8,11 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.swt.internal.win32.INPUT;
+import org.eclipse.swt.internal.win32.KEYBDINPUT;
 import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.internal.win32.RECT;
+import org.eclipse.swt.internal.win32.TCHAR;
 
 import wizest.fx.logging.LogBroker;
 
@@ -80,12 +83,24 @@ public class WindowUtil {
 		// sleep(100);
 		// }
 
-		for (WindowInfo i : enumWindowInfoByTextClassName("","systree"))
-			System.out.println(i);
-
-//		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("¹÷½º", "afx")), ""))
+//		for (WindowInfo i : enumWindowInfoByTextClassName("", "systree"))
 //			System.out.println(i);
 
+		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("¹÷½º", "afx")), "explorer"))
+			System.out.println(i);
+
+		int len = OS.SendMessage(590930, 0x000E, 0, 0); // 0x000E - WM_GETTEXTLEN
+		TCHAR text = new TCHAR(OS.CP_ACP, len);
+		OS.SendMessage(590930, 0x000D, len, text);	// 0x000D - WM_GETTEXT
+		System.out.println(len);
+		System.out.println(text);
+																					
+		// int hHeap = OS.GetProcessHeap();
+		// int pInputs = OS.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
+		// OS.MoveMemory(pInputs, new int[] { OS.INPUT_KEYBOARD }, 4);
+		// OS.MoveMemory(pInputs + 4, inputs, KEYBDINPUT.sizeof);
+		// boolean result = OS.SendInput(1, pInputs, INPUT.sizeof) != 0;
+		// OS.HeapFree(hHeap, 0, pInputs);
 	}
 
 	/**
