@@ -143,7 +143,7 @@ public class BugsRecorder {
 					}
 					String titleTag = title.substring(0, title.lastIndexOf(" - ")).trim();
 					String artistTag = title.substring(title.lastIndexOf(" - ") + 3).trim();
-					String albumTag = artistTag;
+					String albumTag = artistTag; // TODO юс╫ц╥н
 					en.encodeMP3(fWav, fMp3, titleTag, artistTag, albumTag, fAlbumArt);
 
 					Runnable delR = new Runnable() {
