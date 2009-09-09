@@ -10,7 +10,10 @@ import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 
+import org.farng.mp3.TagException;
+
 import wizest.fx.pool.ThreadPool;
+import wizest.fx.template.ExceptionTracer;
 import wizest.fx.util.StackTrace;
 
 public class BugsRecorder {
@@ -60,7 +63,6 @@ public class BugsRecorder {
 		if (!root.isDirectory())
 			throw new IOException("Work directory is not a directory.");
 
-
 		System.out.println("Timeout per a song: " + timeout / 1000. / 60. + " min");
 
 		BugsRecorder bugs = new BugsRecorder(timeout, root, prefix);
@@ -82,7 +84,7 @@ public class BugsRecorder {
 	}
 
 	private void recordSongs() throws LineUnavailableException, IOException {
-		if(!macro.existsBugsPlayer())
+		if (!macro.existsBugsPlayer())
 			throw new IOException("does not exist a running bugsplayer.");
 		try {
 			for (;;)
@@ -101,7 +103,11 @@ public class BugsRecorder {
 		// final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		ac.start(os);
 		final String title = macro.getTitle();
-		// final String lyrics = macro.getLyrics();
+		final String lyrics = macro.getLyrics();
+
+		final File fAlbumArt = new File(root, System.currentTimeMillis() + ".png");
+		macro.captureAlbumArtImage(fAlbumArt);
+
 		macro.waitForNextSong(timeout);
 		ac.stop();
 		os.flush();
@@ -110,7 +116,7 @@ public class BugsRecorder {
 		Runnable r = new Runnable() {
 			public void run() {
 				try {
-					Encoder en = new Encoder();
+					final Encoder en = new Encoder();
 
 					// WAV
 					final File fWav = new File(root, prefix + title + ".wav").getCanonicalFile();
@@ -130,25 +136,34 @@ public class BugsRecorder {
 					fTmp.delete();
 
 					// MP3
-					File fMp3 = new File(root, prefix + title + ".mp3").getCanonicalFile();
+					final File fMp3 = new File(root, prefix + title + ".mp3").getCanonicalFile();
 					if (fMp3.exists()) {
 						fMp3.delete();
 						log.info(fMp3 + " deleted");
 					}
 					String titleTag = title.substring(0, title.lastIndexOf(" - ")).trim();
 					String artistTag = title.substring(title.lastIndexOf(" - ") + 3).trim();
-					en.encodeMP3(fWav, fMp3, titleTag, artistTag);
+					en.encodeMP3(fWav, fMp3, titleTag, artistTag, null, fAlbumArt);
 
 					Runnable delR = new Runnable() {
 						public void run() {
 							// delete WAV after 5 min
 							try {
-								Thread.sleep(1000 * 60 * 3);// 3 min
+								Thread.sleep(1000 * 60 * 2);// 2 min
+//								Thread.sleep(1000 * 10);// 10 sec
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
+							try {
+								en.addLyrics(fMp3, lyrics);
+							} catch (Exception e) {
+								log.warning(StackTrace.trace(e));
+							}
 							fWav.delete();
 							log.info(fWav + " deleted");
+							if (fAlbumArt != null && fAlbumArt.exists())
+								fAlbumArt.delete();
+							log.info(fAlbumArt + " deleted");
 						}
 					};
 
