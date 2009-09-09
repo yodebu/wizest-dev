@@ -74,6 +74,8 @@ public class BugsMacro {
 		WindowUtil.sleep(500);
 		return SimpleClipboard.fromClipboard();
 	}
+	
+	
 
 	// public String convertLyricsTextToLRC(String lyrics) {
 	// return lyrics;
