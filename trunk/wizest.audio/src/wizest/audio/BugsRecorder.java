@@ -143,14 +143,15 @@ public class BugsRecorder {
 					}
 					String titleTag = title.substring(0, title.lastIndexOf(" - ")).trim();
 					String artistTag = title.substring(title.lastIndexOf(" - ") + 3).trim();
-					en.encodeMP3(fWav, fMp3, titleTag, artistTag, null, fAlbumArt);
+					String albumTag = artistTag;
+					en.encodeMP3(fWav, fMp3, titleTag, artistTag, albumTag, fAlbumArt);
 
 					Runnable delR = new Runnable() {
 						public void run() {
 							// delete WAV after 5 min
 							try {
 								Thread.sleep(1000 * 60 * 2);// 2 min
-//								Thread.sleep(1000 * 10);// 10 sec
+								// Thread.sleep(1000 * 10);// 10 sec
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
