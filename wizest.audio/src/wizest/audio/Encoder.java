@@ -15,6 +15,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.farng.mp3.TagException;
+
 import wizest.fx.util.StackTrace;
 
 public class Encoder {
@@ -28,7 +30,7 @@ public class Encoder {
 		final AudioFormat format = Capture.getFormat();
 		final AudioInputStream ais = new AudioInputStream(is, format, length / format.getFrameSize());
 
-//		ais.reset(); // rewind
+		// ais.reset(); // rewind
 
 		if (AudioSystem.isFileTypeSupported(AudioFileFormat.Type.WAVE, ais)) {
 			log.info("wav encoding");
@@ -40,7 +42,7 @@ public class Encoder {
 			throw new UnsupportedAudioFileException("file type not supported: WAV");
 	}
 
-	public void encodeMP3(File wavFile, File mp3File, String title, String artist) throws IOException {
+	public void encodeMP3(File wavFile, File mp3File, String title, String artist, String album, File albumArtImage) throws IOException {
 		try {
 			log.info("mp3 encoding");
 
@@ -57,6 +59,10 @@ public class Encoder {
 				cmd += " --tt \"" + title + "\"";
 			if (artist != null && artist.length() > 0)
 				cmd += " --ta \"" + artist + "\"";
+			if (album != null && album.length() > 0)
+				cmd += " --tl \"" + album + "\"";
+			if (albumArtImage != null && albumArtImage.exists())
+				cmd += " --ti \"" + albumArtImage.getCanonicalPath() + "\"";
 
 			Runtime rt = Runtime.getRuntime();
 			log.info(cmd);
@@ -70,6 +76,28 @@ public class Encoder {
 			log.severe(StackTrace.trace(t));
 			throw new IOException(t);
 		}
+	}
+
+	public void addLyrics(File mp3File, String lyrics) throws IOException, TagException {
+		// MP3File f = new MP3File(mp3File);
+		// // f.getID3v1Tag().setSongLyric(lyrics);
+		// // f.getID3v2Tag().setSongLyric(lyrics);
+		//
+		// AbstractID3v2 tag = f.getID3v2Tag();
+		// AbstractID3v2Frame field = tag.getFrame("USLT");
+		//
+		// if (field == null) {
+		// field = new ID3v2_3Frame(new FrameBodyUSLT((byte) 1, "KOR", "",
+		// lyrics.trim()));
+		// tag.setFrame(field);
+		// } else {
+		// ((FrameBodyUSLT) field.getBody()).setLyric(lyrics.trim());
+		// }
+		//
+		// f.save();
+		//
+		// f = new MP3File(mp3File);
+		// System.out.println(f.getID3v2Tag().getSongLyric());
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -92,6 +120,6 @@ public class Encoder {
 		en.encodeWAV(new ByteArrayInputStream(audio), fos, audio.length);
 
 		fos = new FileOutputStream("C:/temp/audio.mp3");
-		en.encodeMP3(new File("C:/temp/audio.wav"), new File("C:/temp/audio.mp3"), null, null);
+		en.encodeMP3(new File("C:/temp/audio.wav"), new File("C:/temp/audio.mp3"), null, null, null, null);
 	}
 }
