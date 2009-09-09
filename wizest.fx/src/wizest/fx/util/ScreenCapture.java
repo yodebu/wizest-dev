@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 public class ScreenCapture {
 
-	public static void capture(int x, int y, int width, int height, File fileToSave) throws IOException {
+	public static void captureAsPng(int x, int y, int width, int height, File fileToSave) throws IOException {
 		BufferedImage screencapture;
 		try {
 			screencapture = new Robot().createScreenCapture(new Rectangle(x, y, width, height));
@@ -23,20 +23,20 @@ public class ScreenCapture {
 		ImageIO.write(screencapture, "png", fileToSave);
 	}
 
-	public static void capture(File fileToSave) throws IOException {
+	public static void captureAsPng(File fileToSave) throws IOException {
 		Rectangle r = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-		capture(r.x, r.y, r.width, r.height, fileToSave);
+		captureAsPng(r.x, r.y, r.width, r.height, fileToSave);
 	}
 
 	public static void main(String args[]) throws Exception {
 
 		// Save as JPEG
 		File file = new File("screencapture.png");
-		capture(file);
+		captureAsPng(file);
 		System.out.println(file.getCanonicalFile());
 
 		file = new File("screencapture2.png");
-		capture(100, 100, 100, 100, file);
+		captureAsPng(100, 100, 100, 100, file);
 		System.out.println(file.getCanonicalFile());
 
 	}
