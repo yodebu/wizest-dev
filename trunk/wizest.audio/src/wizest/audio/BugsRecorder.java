@@ -10,10 +10,7 @@ import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import org.farng.mp3.TagException;
-
 import wizest.fx.pool.ThreadPool;
-import wizest.fx.template.ExceptionTracer;
 import wizest.fx.util.StackTrace;
 
 public class BugsRecorder {

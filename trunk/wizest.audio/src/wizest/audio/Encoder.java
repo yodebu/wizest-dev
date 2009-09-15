@@ -66,7 +66,8 @@ public class Encoder {
 
 			Runtime rt = Runtime.getRuntime();
 			log.info(cmd);
-			Process p = rt.exec(cmd);
+			rt.exec(cmd);
+//			Process p = rt.exec(cmd);
 			// int exitValue = p.waitFor();
 			// log.info("Lame exits with exitValue=" + exitValue);
 			log.info("mp3 encoded");
