@@ -8,8 +8,6 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.swt.internal.win32.INPUT;
-import org.eclipse.swt.internal.win32.KEYBDINPUT;
 import org.eclipse.swt.internal.win32.OS;
 import org.eclipse.swt.internal.win32.RECT;
 import org.eclipse.swt.internal.win32.TCHAR;
