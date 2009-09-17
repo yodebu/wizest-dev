@@ -11,10 +11,12 @@ import javax.imageio.ImageIO;
 
 public class ScreenCapture {
 
-	public static void captureAsPng(int x, int y, int width, int height, File fileToSave) throws IOException {
+	public static void captureAsPng(int x, int y, int width, int height,
+			File fileToSave) throws IOException {
 		BufferedImage screencapture;
 		try {
-			screencapture = new Robot().createScreenCapture(new Rectangle(x, y, width, height));
+			screencapture = new Robot().createScreenCapture(new Rectangle(x, y,
+					width, height));
 		} catch (Exception e) {
 			throw new IOException(e);
 		}
@@ -40,4 +42,5 @@ public class ScreenCapture {
 		System.out.println(file.getCanonicalFile());
 
 	}
+
 }
