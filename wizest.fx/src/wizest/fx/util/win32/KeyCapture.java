@@ -3,6 +3,7 @@ package wizest.fx.util.win32;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
@@ -21,7 +22,14 @@ public class KeyCapture {
 
 		button.setText("Type Something");
 
-		button.addKeyListener(new KeyAdapter() {
+		button.addKeyListener(new KeyListener() {
+
+			public void keyReleased(KeyEvent e) {
+				System.out.print("Released:");
+				System.out.println(e);
+
+			}
+
 			public void keyPressed(KeyEvent e) {
 				String string = "";
 
@@ -54,6 +62,8 @@ public class KeyCapture {
 				if (!string.equals(""))
 					System.out.println(string);
 				// else
+				
+				System.out.print("Pressed :");
 				System.out.println(e.toString());
 			}
 		});
