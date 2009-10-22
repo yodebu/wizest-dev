@@ -21,7 +21,7 @@ public class RegressionSlope implements Slope {
 	}
 
 	public static void main(String[] args) {
-		Slope s = new StochasticSlope(10);
+		Slope s = new RegressionSlope();
 		s.addValue(10);
 		s.addValue(11);
 		s.addValue(12);
@@ -34,6 +34,6 @@ public class RegressionSlope implements Slope {
 		s.addValue(15);
 
 		System.out.println(s.getSlope());
-		System.out.println(s.getSlope() * 180. / Math.PI);
+		System.out.println(Math.asin(s.getSlope()) * 180. / Math.PI);
 	}
 }
