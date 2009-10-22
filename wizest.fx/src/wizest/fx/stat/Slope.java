@@ -5,8 +5,11 @@ public interface Slope {
 	void addValue(double v);
 
 	/**
-	 * @return -Math.PI/2 < value <= Math.PI/2 slope in radian angle
+	 * This method returns the manipulated angle which is the sine of the radian
+	 * angle of slope.
+	 * 
+	 * @return -1 < returnValue < 1 for which the returnValue equals to
+	 *         sin(radian angle of slope)
 	 */
-	double getSlopeRad();
-
+	double getSlope();
 }
