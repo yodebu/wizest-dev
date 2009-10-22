@@ -17,7 +17,7 @@ public class StochasticSlope implements Slope {
 	}
 
 	@Override
-	public double getSlopeRad() {
+	public double getSlope() {
 		double mean = stats.getMean();
 		double std = stats.getStandardDeviation();
 
@@ -38,8 +38,8 @@ public class StochasticSlope implements Slope {
 		s.addValue(14);
 		s.addValue(15);
 
-		System.out.println(s.getSlopeRad());
-		System.out.println(s.getSlopeRad() * 180. / Math.PI);
+		System.out.println(s.getSlope());
+		System.out.println(s.getSlope() * 180. / Math.PI);
 	}
 
 }
