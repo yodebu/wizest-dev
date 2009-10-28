@@ -42,7 +42,7 @@ public class StochasticSlope implements Slope {
 		s.addValue(1);
 		s.addValue(7);
 		s.addValue(0);
-		s.addValue(17);
+		s.addValue(2);
 
 		System.out.println(s.getSlope());
 		System.out.println(Math.asin(s.getSlope()) * 180. / Math.PI);
