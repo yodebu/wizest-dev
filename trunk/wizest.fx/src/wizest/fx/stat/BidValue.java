@@ -3,7 +3,7 @@ package wizest.fx.stat;
 public class BidValue {
 
 	private int p; // bid price
-	private int r; // remain
+	private long r; // remain
 	private int v; // value
 
 	public BidValue() {
@@ -12,8 +12,8 @@ public class BidValue {
 		v = 0;
 	}
 
-	public int updateValue(int bidPrice, int remain) {
-		int d;
+	public int updateValue(int bidPrice, long remain) {
+		long d;
 		switch (1) {
 		case 1: // TYPE1
 			if (p == bidPrice)
