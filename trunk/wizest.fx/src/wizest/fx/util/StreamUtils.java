@@ -12,7 +12,6 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-
 public class StreamUtils {
 	private StreamUtils() {
 	}
@@ -30,7 +29,26 @@ public class StreamUtils {
 		copy(is, os, true);
 	}
 
-	public static void copy(InputStream is, OutputStream os, final boolean closeStreams) throws IOException {
+	public static void copyUntilEmptyInput(InputStream is, OutputStream os,
+			final boolean closeStreams) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(is);
+		BufferedOutputStream out = new BufferedOutputStream(os);
+		byte[] buff = new byte[8192];
+		for (;;) {
+			int read = in.read(buff);
+			if (read <= 0)
+				break;
+			out.write(buff, 0, read);
+		}
+		out.flush();
+		if (closeStreams) {
+			out.close();
+			in.close();
+		}
+	}
+
+	public static void copy(InputStream is, OutputStream os,
+			final boolean closeStreams) throws IOException {
 		if (is instanceof FileInputStream) {
 			if (os instanceof FileOutputStream) {
 				FileInputStream fis = (FileInputStream) is;
