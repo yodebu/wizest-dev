@@ -37,6 +37,7 @@ Function SendText(Text)
     
     BodySent = Text
     Set WinHTTP = CreateObject("WinHttp.WinHttpRequest.5.1")
+    'Set WinHTTP = New WinHttpRequest
     
     WinHTTP.Open "PUT", "http://127.0.0.1:8888", False
     WinHTTP.SetTimeouts 1000, 1000, 1000, 1000
