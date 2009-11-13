@@ -1,7 +1,30 @@
+Public Declare Function SetTimer Lib "user32" ( _
+    ByVal HWnd As Long, ByVal nIDEvent As Long, _
+    ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
+    
+Public Declare Function KillTimer Lib "user32" ( _
+    ByVal HWnd As Long, ByVal nIDEvent As Long) As Long
+    
+Public TimerID As Long
+
+Sub StartTimer()
+    TimerID = SetTimer(0&, 0&, 1000&, AddressOf SendSheet)
+    '그리고 타이머를 설정합니다. 1000&는 약 1초에 해당합니다.
+    '1초마다 Main 프로시저를 실행하겠다는 것입니다
+    '빠르게 실행하고 싶다면 이 숫자를 작게하면 됩니다..
+End Sub
+
+Sub StopTimer()
+     KillTimer 0&, TimerID
+    '설정한 타이머를 해제합니다.
+End Sub
+
 Sub SendSheet()
-    Text = SendText("helloooooooooooooooo~")
+    Text = SendText(Now() & " helloooooooooooooooo~")
     Debug.Print Text
 End Sub
+
+
 
 Function SendText(Text)
     On Error GoTo ErrHandler:
