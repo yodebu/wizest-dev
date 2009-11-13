@@ -1,0 +1,44 @@
+Sub SendSheet()
+    Text = SendText("helloooooooooooooooo~")
+    Debug.Print Text
+End Sub
+
+Function SendText(Text)
+    On Error GoTo ErrHandler:
+
+    'Debug.Print "Start Time: " & Time
+    
+    Dim WinHTTP As Object
+    Dim ResponseText
+    Dim BodySent
+    
+    BodySent = Text
+    Set WinHTTP = CreateObject("WinHttp.WinHttpRequest.5.1")
+    
+    WinHTTP.Open "PUT", "http://127.0.0.1:8888", False
+    WinHTTP.SetTimeouts 1000, 1000, 1000, 1000
+    
+    WinHTTP.setRequestHeader "Content-Type", "text/plain"
+    
+    WinHTTP.send BodySent
+    
+    'Debug.Print WinHTTP.Status & " - " & WinHTTP.StatusText
+    If WinHTTP.StatusText = "OK" Then
+        ResponseText = WinHTTP.ResponseText
+        'Debug.Print ResponseText
+    End If
+    
+    Set WinHTTP = Nothing
+    
+    SendText = ResponseText
+    'Debug.Print "End Time: " & Time
+    
+    Exit Function
+    
+ErrHandler:
+    SendText = Date & " " & Time & ":" & Error
+    Debug.Print SendText
+    
+End Function
+
+

@@ -3,9 +3,13 @@
  */
 package wizest.fx.serv.http;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.util.Date;
 
 import wizest.fx.serv.Server;
 import wizest.fx.serv.ServiceException;
@@ -19,9 +23,16 @@ public class HttpServiceTest {
 		HttpService sv = new HttpService() {
 			public void doService(HttpServiceContext c) throws ServiceException {
 				try {
+					System.out.println(new String(c.getHttpRequest()
+							.getHeader()));
+
+					// input body
+					System.out.println("Input Body:");
 					InputStream is = c.getInputStream();
-					System.out.println(new String(StreamUtils.toByteArray(is)));
-					System.out.println(new String(c.getHttpRequest().getHeader()));
+					ByteArrayOutputStream os = new ByteArrayOutputStream();
+					StreamUtils.copyUntilEmptyInput(is, os, false);
+					System.out.println(new String(os.toByteArray(), "UTF-8"));
+
 					// Cookie[] cs = c.getHttpRequest().getCookie();
 					// for (int i = 0, length = cs.length; i < length; ++i) {
 					// System.out.println(cs[i].makeSetCookieString());
@@ -39,10 +50,13 @@ public class HttpServiceTest {
 					// System.out.println(c.getSession());
 					// System.out.println(c.getSession().getId());
 
-//					c.getHttpResponse().send(new File("c:/temp/t.jpg"));
+					// c.getHttpResponse().send(new File("c:/temp/t.jpg"));
 					// c.getHttpResponse().send(new File("/ex.exe"));
 					// c.getHttpResponse().send(new File("/su.txt"));
-					 c.getHttpResponse().send("<html>수신</html>","euc-kr");
+
+					c.getHttpResponse().send(
+							"<html>수신 at " + System.currentTimeMillis()
+									+ "</html>", "EUC-KR");
 				} catch (IOException e) {
 					throw new ServiceException(e.getMessage(), e);
 				}

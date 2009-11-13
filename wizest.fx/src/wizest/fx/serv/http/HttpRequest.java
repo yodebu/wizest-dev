@@ -91,7 +91,10 @@ public class HttpRequest {
 	 * 
 	 * The text in between the parens are used to captured the regexp text.
 	 */
-	private static Pattern requestPattern = Pattern.compile("\\A([A-Z]+) +([^ ]+) +HTTP/([0-9\\.]+)$" + ".*^Host: ([^ ]+)$.*\r\n\r\n\\z", Pattern.MULTILINE | Pattern.DOTALL);
+	private static Pattern requestPattern = Pattern.compile(
+			"\\A([A-Z]+) +([^ ]+) +HTTP/([0-9\\.]+)$"
+					+ ".*^Host: ([^ ]+)$.*\r\n\r\n\\z", Pattern.MULTILINE
+					| Pattern.DOTALL);
 
 	private void parseRequest() throws ServiceException {
 		Matcher m = requestPattern.matcher(headerString_ISO8859_1);
@@ -119,13 +122,18 @@ public class HttpRequest {
 			bytes.add(Byte.valueOf((byte) r));
 			if (bytes.size() > 3) {
 				int size = bytes.size();
-				if (bytes.get(size - 4).byteValue() == (byte) '\r' && bytes.get(size - 3).byteValue() == (byte) '\n' && bytes.get(size - 2).byteValue() == (byte) '\r' && bytes.get(size - 1).byteValue() == (byte) '\n')
+				if (bytes.get(size - 4).byteValue() == (byte) '\r'
+						&& bytes.get(size - 3).byteValue() == (byte) '\n'
+						&& bytes.get(size - 2).byteValue() == (byte) '\r'
+						&& bytes.get(size - 1).byteValue() == (byte) '\n')
 					break;
 			}
 		}
 		byte[] result = new byte[bytes.size()];
 		for (int i = 0, length = bytes.size(); i < length; ++i)
 			result[i] = bytes.get(i).byteValue();
+
+		// System.out.println(new String(result));
 		return result;
 	}
 
@@ -158,9 +166,12 @@ public class HttpRequest {
 		return header;
 	}
 
-	private static Pattern acceptLangPattern = Pattern.compile("^Accept-Language: (.*)$", Pattern.MULTILINE);
-	private static Pattern contentLengthPattern = Pattern.compile("^Content-Length: (.*)$", Pattern.MULTILINE);
-	private static Pattern cookiePattern = Pattern.compile("^Cookie: (.*)$", Pattern.MULTILINE);
+	private static Pattern acceptLangPattern = Pattern.compile(
+			"^Accept-Language: (.*)$", Pattern.MULTILINE);
+	private static Pattern contentLengthPattern = Pattern.compile(
+			"^Content-Length: (.*)$", Pattern.MULTILINE);
+	private static Pattern cookiePattern = Pattern.compile("^Cookie: (.*)$",
+			Pattern.MULTILINE);
 
 	/**
 	 * @return ex) ko, jp, en
@@ -189,7 +200,8 @@ public class HttpRequest {
 			return null;
 	}
 
-	private static Pattern headerPattern = Pattern.compile("^(.*): (.*)$", Pattern.MULTILINE);
+	private static Pattern headerPattern = Pattern.compile("^(.*): (.*)$",
+			Pattern.MULTILINE);
 
 	private Map<String, String> _parseHeaders(String h) {
 		Matcher m = headerPattern.matcher(h);
@@ -221,7 +233,8 @@ public class HttpRequest {
 	// }
 	protected static Map<String, String> _parserParameters(String paramString) {
 		int idx;
-		String params = (idx = paramString.indexOf('?')) == -1 ? "" : paramString.substring(idx + 1);
+		String params = (idx = paramString.indexOf('?')) == -1 ? ""
+				: paramString.substring(idx + 1);
 		HashMap<String, String> map = new HashMap<String, String>();
 		if (params.length() > 0) {
 			String[] ps = params.split("&");
@@ -247,7 +260,8 @@ public class HttpRequest {
 			if (idx < 0)
 				list.add(new Cookie(aCookie[i], ""));
 			else
-				list.add(new Cookie(aCookie[i].substring(0, idx), aCookie[i].substring(idx + 1)));
+				list.add(new Cookie(aCookie[i].substring(0, idx), aCookie[i]
+						.substring(idx + 1)));
 		}
 		return list.toArray(new Cookie[0]);
 	}
