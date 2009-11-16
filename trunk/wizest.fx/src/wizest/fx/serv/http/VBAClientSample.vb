@@ -9,14 +9,12 @@ Public TimerID As Long
 
 Sub StartTimer()
     TimerID = SetTimer(0&, 0&, 1000&, AddressOf SendSheet)
-    '그리고 타이머를 설정합니다. 1000&는 약 1초에 해당합니다.
-    '1초마다 Main 프로시저를 실행하겠다는 것입니다
-    '빠르게 실행하고 싶다면 이 숫자를 작게하면 됩니다..
+    '타이머 설정. 1000&는 약 1초
 End Sub
 
 Sub StopTimer()
      KillTimer 0&, TimerID
-    '설정한 타이머를 해제합니다.
+    '타이머 해제
 End Sub
 
 Sub SendSheet()
@@ -66,3 +64,21 @@ ErrHandler:
 End Function
 
 
+Public Function GetUsedRangeAsCSVString()
+    On Error GoTo 0
+    Dim s As Worksheet
+    Set s = Sheets("시세판")
+    Dim ur As Range
+    Set ur = s.UsedRange
+    Dim csv As String
+    csv = ""
+    Dim i, j As Integer
+    For i = 1 To ur.Rows.Count
+        For j = 1 To ur.Columns.Count
+            csv = csv & ur(i, j).Text & ","
+        Next
+            csv = csv & vbNewLine
+    Next
+    'Debug.Print csv
+    GetUsedRangeAsCSVString = csv
+End Function
