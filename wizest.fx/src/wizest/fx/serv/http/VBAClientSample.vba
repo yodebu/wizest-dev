@@ -22,8 +22,6 @@ Sub SendSheet()
     Debug.Print Text
 End Sub
 
-
-
 Function SendText(Text)
     On Error GoTo ErrHandler:
 
@@ -63,22 +61,32 @@ ErrHandler:
     
 End Function
 
-
-Public Function GetUsedRangeAsCSVString()
+Public Function GetTextAsCSV()
     On Error GoTo 0
+    Dim b As Workbook
     Dim s As Worksheet
-    Set s = Sheets("½Ã¼¼ÆÇ")
-    Dim ur As Range
-    Set ur = s.UsedRange
-    Dim csv As String
-    csv = ""
-    Dim i, j As Integer
-    For i = 1 To ur.Rows.Count
-        For j = 1 To ur.Columns.Count
-            csv = csv & ur(i, j).Text & ","
-        Next
-            csv = csv & vbNewLine
-    Next
-    'Debug.Print csv
-    GetUsedRangeAsCSVString = csv
+    
+    For bi = 1 To Workbooks.Count
+        Set b = Workbooks(bi)
+        'Debug.Print b.Name
+        For si = 1 To Sheets.Count
+            Set s = b.Worksheets(si)
+            'Debug.Print s.Name
+            Dim ur As Range
+            Set ur = s.UsedRange
+            Dim csv As String
+            csv = ""
+            Dim i, j As Integer
+            For i = 1 To ur.Rows.Count
+                For j = 1 To ur.Columns.Count
+                    csv = csv & ur(i, j).Text & ","
+                Next
+                    csv = csv & vbNewLine
+            Next i
+            'Debug.Print csv
+            GetUsedRangeAsCSVString = GetUsedRangeAsCSVString & csv
+        Next si
+    Next bi
+    Debug.Print GetUsedRangeAsCSVString
 End Function
+
