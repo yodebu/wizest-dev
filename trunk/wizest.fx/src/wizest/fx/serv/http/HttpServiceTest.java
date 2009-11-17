@@ -51,9 +51,12 @@ public class HttpServiceTest {
 					// c.getHttpResponse().send(new File("/ex.exe"));
 					// c.getHttpResponse().send(new File("/su.txt"));
 
-					c.getHttpResponse().send(
-							"<html>수신 at " + System.currentTimeMillis()
-									+ "</html>", "EUC-KR");
+					// c.getHttpResponse().send("<html>수신 at " +
+					// System.currentTimeMillis()+ "</html>", "EUC-KR");
+
+					String r = System.currentTimeMillis() + "\n"
+							+ new String(os.toByteArray("UTF-8"));
+					c.getHttpResponse().send(r, "UTF-8");
 				} catch (IOException e) {
 					throw new ServiceException(e.getMessage(), e);
 				}
