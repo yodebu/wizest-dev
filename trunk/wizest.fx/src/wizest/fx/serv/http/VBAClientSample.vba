@@ -8,7 +8,7 @@ Public Declare Function KillTimer Lib "user32" ( _
 Public TimerID As Long
 
 Sub StartTimer()
-    TimerID = SetTimer(0&, 0&, 1000&, AddressOf SendSheet)
+    TimerID = SetTimer(0&, 0&, 1000&, AddressOf Send)
     '타이머 설정. 1000&는 약 1초
 End Sub
 
@@ -17,7 +17,7 @@ Sub StopTimer()
     '타이머 해제
 End Sub
 
-Sub SendSheet()
+Sub Send()
     'Text = SendText(Now() & " helloooooooooooooooo~")
     Text = SendText(GetTextAsCSV())
     
@@ -43,7 +43,7 @@ Function SendText(Text)
     
     WinHTTP.setRequestHeader "Content-Type", "text/plain"
     
-    WinHTTP.send BodySent
+    WinHTTP.Send BodySent
     
     'Debug.Print WinHTTP.Status & " - " & WinHTTP.StatusText
     If WinHTTP.StatusText = "OK" Then
@@ -72,8 +72,8 @@ Public Function GetTextAsCSV()
     For bi = 1 To Workbooks.Count
         Set b = Workbooks(bi)
         'Debug.Print b.Name
-        For si = 1 To Sheets.Count
-            Set s = b.Worksheets(si)
+        For si = 1 To b.Sheets.Count
+            Set s = b.Sheets(si)
             'Debug.Print s.Name
             Dim ur As Range
             Set ur = s.UsedRange
@@ -92,4 +92,6 @@ Public Function GetTextAsCSV()
     Next bi
     'Debug.Print GetUsedRangeAsCSVString
 End Function
+
+
 
