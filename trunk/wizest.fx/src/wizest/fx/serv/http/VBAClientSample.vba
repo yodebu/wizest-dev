@@ -28,6 +28,7 @@ Function SendText(Text)
     On Error GoTo ErrHandler:
 
     'Debug.Print "Start Time: " & Time
+    'Debug.Print Text
     
     Dim WinHTTP As Object
     Dim ResponseText
@@ -86,7 +87,7 @@ Public Function GetTextAsCSV()
                     csv = csv & vbNewLine
             Next i
             'Debug.Print csv
-            GetUsedRangeAsCSVString = GetUsedRangeAsCSVString & csv
+            GetTextAsCSV = GetTextAsCSV & csv
         Next si
     Next bi
     'Debug.Print GetUsedRangeAsCSVString
