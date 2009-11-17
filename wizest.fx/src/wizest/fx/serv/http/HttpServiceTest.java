@@ -55,7 +55,7 @@ public class HttpServiceTest {
 					// System.currentTimeMillis()+ "</html>", "EUC-KR");
 
 					String r = System.currentTimeMillis() + "\n"
-							+ new String(os.toByteArray("UTF-8"));
+							+ new String(os.toByteArray(), "UTF-8");
 					c.getHttpResponse().send(r, "UTF-8");
 				} catch (IOException e) {
 					throw new ServiceException(e.getMessage(), e);
