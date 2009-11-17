@@ -18,7 +18,9 @@ Sub StopTimer()
 End Sub
 
 Sub SendSheet()
-    Text = SendText(Now() & " helloooooooooooooooo~")
+    'Text = SendText(Now() & " helloooooooooooooooo~")
+    Text = SendText(GetTextAsCSV())
+    
     Debug.Print Text
 End Sub
 
@@ -87,6 +89,6 @@ Public Function GetTextAsCSV()
             GetUsedRangeAsCSVString = GetUsedRangeAsCSVString & csv
         Next si
     Next bi
-    Debug.Print GetUsedRangeAsCSVString
+    'Debug.Print GetUsedRangeAsCSVString
 End Function
 
