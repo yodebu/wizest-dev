@@ -142,10 +142,10 @@ public class Macro {
 		}
 		return true;
 	}
-	
-	
+
 	/**
 	 * ctrl-c °°Àº °Í
+	 * 
 	 * @param KEYCODE
 	 * @param CHARACTER
 	 * @return
@@ -162,7 +162,7 @@ public class Macro {
 		if (Win32SendInput.post(e) && Win32SendInput.post(e2)) {
 			e.type = SWT.KeyUp;
 			e.keyCode = KEYCODE;
-			
+
 			e2.type = SWT.KeyUp;
 			e2.character = CHARACTER;
 
@@ -188,6 +188,14 @@ public class Macro {
 		return keyMultiInput(new int[] { SWT.ALT, SWT.F4 });
 	}
 
+	public static synchronized boolean keyInputCopy() {
+		return keyMultiInput(new int[] { SWT.CTRL, SWT.INSERT });
+	}
+
+	public static synchronized boolean keyInputPaste() {
+		return keyMultiInput(new int[] { SWT.SHIFT, SWT.INSERT });
+	}
+
 	public static synchronized boolean keyInputWin() {
 		return Macro.keyMultiInput(new int[] { SWT.CTRL, SWT.ESC });
 	}
@@ -207,4 +215,5 @@ public class Macro {
 		// keyInputAltF4();
 		keyInputWin();
 	}
+
 }

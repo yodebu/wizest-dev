@@ -65,7 +65,7 @@ ErrHandler:
 End Function
 
 Public Function GetTextAsCSV()
-    On Error GoTo 0
+    On Error GoTo Err
     Dim b As Workbook
     Dim s As Worksheet
     
@@ -91,7 +91,9 @@ Public Function GetTextAsCSV()
         Next si
     Next bi
     'Debug.Print GetUsedRangeAsCSVString
+    Exit Function
+Err:
+    GetTextAsCSV = ""
 End Function
-
 
 
