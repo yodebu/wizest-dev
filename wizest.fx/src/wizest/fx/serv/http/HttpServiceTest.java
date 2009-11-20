@@ -22,6 +22,7 @@ public class HttpServiceTest {
 				try {
 					System.out.println(new String(c.getHttpRequest()
 							.getHeader()));
+					// System.out.println(c.getHttpRequest().getRequestURI());
 
 					// input body
 					System.out.println("Input Body:");
