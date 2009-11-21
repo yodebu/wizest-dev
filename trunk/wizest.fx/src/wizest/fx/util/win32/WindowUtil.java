@@ -18,7 +18,8 @@ public class WindowUtil {
 
 	// private static final Logger log =
 	// Logger.getLogger(WindowUtil.class.getName());
-	private static final Logger log = LogBroker.getLogger(WindowUtil.class.getName());
+	private static final Logger log = LogBroker.getLogger(WindowUtil.class
+			.getName());
 
 	public static void sleep(long ms) {
 		try {
@@ -81,18 +82,20 @@ public class WindowUtil {
 		// sleep(100);
 		// }
 
-//		for (WindowInfo i : enumWindowInfoByTextClassName("", "systree"))
-//			System.out.println(i);
+		// for (WindowInfo i : enumWindowInfoByTextClassName("", "systree"))
+		// System.out.println(i);
 
-		for (WindowInfo i : filterWindowInfoByClassName(enumWindowInfoByAncestor(findHWnd("벅스", "afx")), "explorer"))
+		for (WindowInfo i : filterWindowInfoByClassName(
+				enumWindowInfoByAncestor(findHWnd("벅스", "afx")), "explorer"))
 			System.out.println(i);
 
-		int len = OS.SendMessage(590930, 0x000E, 0, 0); // 0x000E - WM_GETTEXTLEN
+		int len = OS.SendMessage(590930, 0x000E, 0, 0); // 0x000E -
+		// WM_GETTEXTLEN
 		TCHAR text = new TCHAR(OS.CP_ACP, len);
-		OS.SendMessage(590930, 0x000D, len, text);	// 0x000D - WM_GETTEXT
+		OS.SendMessage(590930, 0x000D, len, text); // 0x000D - WM_GETTEXT
 		System.out.println(len);
 		System.out.println(text);
-																					
+
 		// int hHeap = OS.GetProcessHeap();
 		// int pInputs = OS.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
 		// OS.MoveMemory(pInputs, new int[] { OS.INPUT_KEYBOARD }, 4);
@@ -110,11 +113,13 @@ public class WindowUtil {
 	 *            ms - 윈도우가 있을때까지 기다리는 시간 0이면 한번만 시도
 	 * @return foreground 된 hWnd
 	 */
-	public static int setForegroundWindowByText(String text, String className, long timeout) {
+	public static int setForegroundWindowByText(String text, String className,
+			long timeout) {
 		long start = System.currentTimeMillis();
 		int hWnd = findHWnd(text, className);
 
-		while (timeout > 0 && System.currentTimeMillis() < start + timeout && hWnd < 0) {
+		while (timeout > 0 && System.currentTimeMillis() < start + timeout
+				&& hWnd < 0) {
 			sleep(100);
 			hWnd = findHWnd(text, className);
 		}
@@ -258,23 +263,30 @@ public class WindowUtil {
 		return filterWindowInfoByText(enumWindowInfo(), text);
 	}
 
-	public static List<WindowInfo> enumWindowInfoByTextClassName(String text, String className) {
-		return filterWindowInfoByClassName(filterWindowInfoByText(enumWindowInfo(), text), className);
+	public static List<WindowInfo> enumWindowInfoByTextClassName(String text,
+			String className) {
+		return filterWindowInfoByClassName(filterWindowInfoByText(
+				enumWindowInfo(), text), className);
 	}
 
-	public static List<WindowInfo> filterWindowInfoByText(List<WindowInfo> list, String text) {
+	public static List<WindowInfo> filterWindowInfoByText(
+			List<WindowInfo> list, String text) {
 		List<WindowInfo> l = new ArrayList<WindowInfo>();
 		for (WindowInfo i : list) {
-			if (i.text != null && i.text.toLowerCase().indexOf(text.toLowerCase()) >= 0)
+			if (i.text != null
+					&& i.text.toLowerCase().indexOf(text.toLowerCase()) >= 0)
 				l.add(i);
 		}
 		return l;
 	}
 
-	public static List<WindowInfo> filterWindowInfoByClassName(List<WindowInfo> list, String classNameFilter) {
+	public static List<WindowInfo> filterWindowInfoByClassName(
+			List<WindowInfo> list, String classNameFilter) {
 		List<WindowInfo> l = new ArrayList<WindowInfo>();
 		for (WindowInfo i : list) {
-			if (i.className != null && i.className.toLowerCase().indexOf(classNameFilter.toLowerCase()) >= 0)
+			if (i.className != null
+					&& i.className.toLowerCase().indexOf(
+							classNameFilter.toLowerCase()) >= 0)
 				l.add(i);
 		}
 		return l;

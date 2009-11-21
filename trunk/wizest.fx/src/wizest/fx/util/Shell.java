@@ -56,7 +56,8 @@ public class Shell {
 						s.push(fs[i]);
 					}
 				} else {
-					File dst = new File(target, src.getAbsolutePath().substring(sPathLength));
+					File dst = new File(target, src.getAbsolutePath()
+							.substring(sPathLength));
 					copyFile(src, dst);
 				}
 			}

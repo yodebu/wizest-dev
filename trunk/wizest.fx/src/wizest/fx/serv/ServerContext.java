@@ -9,14 +9,14 @@ import wizest.fx.util.GenericContext;
  * @author wizest
  */
 public class ServerContext extends GenericContext {
-    private final Server server;
+	private final Server server;
 
-    public ServerContext(/* Context parent, */Server server) {
-        //        super(parent);
-        this.server = server;
-    }
+	public ServerContext(/* Context parent, */Server server) {
+		// super(parent);
+		this.server = server;
+	}
 
-    public Server getServer() {
-        return this.server;
-    }
+	public Server getServer() {
+		return this.server;
+	}
 }

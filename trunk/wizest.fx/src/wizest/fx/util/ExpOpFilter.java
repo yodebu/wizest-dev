@@ -125,7 +125,7 @@ public class ExpOpFilter {
 		System.out.println(f.filter(eval, "||", "TRUE"));
 
 		// && 연산자 없앰
-//		System.out.println(f.filter(eval, "&&", null));
+		// System.out.println(f.filter(eval, "&&", null));
 
 		System.out.println("-----");
 	}

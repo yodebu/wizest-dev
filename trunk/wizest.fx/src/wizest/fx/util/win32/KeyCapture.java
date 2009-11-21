@@ -61,7 +61,7 @@ public class KeyCapture {
 				if (!string.equals(""))
 					System.out.println(string);
 				// else
-				
+
 				System.out.print("Pressed :");
 				System.out.println(e.toString());
 			}

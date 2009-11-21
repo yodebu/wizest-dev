@@ -1,51 +1,43 @@
 package wizest.fx.util;
 
+public class InfixExpress {
+	private String origin;
 
+	private String[] express;
+	private boolean[] operator;
 
-public class InfixExpress
-{
-    private String origin;
+	public InfixExpress(String origin, String[] express, boolean[] operator) {
+		this.origin = origin;
 
-    private String[] express;
-    private boolean[] operator;
+		this.express = express;
+		this.operator = operator;
+	}
 
-    public InfixExpress(String origin,String[] express,boolean[] operator)
-    {
-        this.origin=origin;
+	public String getOrigin() {
+		return this.origin;
+	}
 
-        this.express=express;
-        this.operator=operator;
-    }
+	public String[] getExpressions() {
+		return express;
+	}
 
-    public String getOrigin()
-    {
-        return this.origin;
-    }
+	public boolean[] getIsOperator() {
+		return operator;
+	}
 
-    public String[] getExpressions()
-    {
-        return express;
-    }
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		buf.append("{");
+		for (int i = 0; i < express.length; ++i) {
+			if (operator[i]) {
+				buf.append("Op:");
+			}
+			buf.append(express[i]);
+			buf.append(",");
+		}
+		buf.append("}");
 
-    public boolean[] getIsOperator()
-    {
-        return operator;
-    }
-
-    public String toString()
-    {
-        StringBuffer buf=new StringBuffer();
-        buf.append("{");
-        for(int i=0;i < express.length;++i) {
-            if(operator[i]) {
-                buf.append("Op:");
-            }
-            buf.append(express[i]);
-            buf.append(",");
-        }
-        buf.append("}");
-
-        return buf.toString();
-    }
+		return buf.toString();
+	}
 
 }

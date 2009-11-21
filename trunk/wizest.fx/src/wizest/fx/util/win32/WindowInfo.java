@@ -1,6 +1,5 @@
 package wizest.fx.util.win32;
 
-
 public class WindowInfo {
 	public int hWnd;
 	public String text;

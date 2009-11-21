@@ -26,7 +26,8 @@ public class SocketChannelOutputStream extends OutputStream {
 		write(new byte[] { (byte) b }, 0, 1);
 	}
 
-	public synchronized void write(byte[] bs, int off, int len) throws IOException {
+	public synchronized void write(byte[] bs, int off, int len)
+			throws IOException {
 		ByteBuffer buff = ByteBuffer.wrap(bs, off, len);
 		int real = 0;
 		do {
