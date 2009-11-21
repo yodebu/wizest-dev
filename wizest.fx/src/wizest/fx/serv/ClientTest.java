@@ -15,27 +15,30 @@ public class ClientTest {
 
 		Server s = new Server(new InetSocketAddress(8888), new Service() {
 
-			public void doService(ServiceContext request) throws ServiceException {
+			public void doService(ServiceContext request)
+					throws ServiceException {
 				try {
 					SocketChannel sc = request.getSocketChannel();
 					sc.configureBlocking(false);
-					SocketChannelInputStream is = new SocketChannelInputStream(sc);
+					SocketChannelInputStream is = new SocketChannelInputStream(
+							sc);
 
-					System.out.println(new String(StreamUtils.toByteArray(is), "iso-8859-1"));
+					System.out.println(new String(StreamUtils.toByteArray(is),
+							"iso-8859-1"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				System.out.println("closing.");
 			}
 
-		
 			public Class<? extends ServiceContext> getServiceContextClass() {
 				return ServiceContext.class;
 			}
 		});
 
 		Client c = new Client() {
-			public void service(InputStream is, OutputStream os) throws IOException {
+			public void service(InputStream is, OutputStream os)
+					throws IOException {
 				PrintWriter out = new PrintWriter(os, true);
 				for (int i = 0; i < 2; ++i)
 					out.println("hello, world.");

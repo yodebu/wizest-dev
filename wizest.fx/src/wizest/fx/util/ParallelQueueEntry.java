@@ -1,8 +1,5 @@
 package wizest.fx.util;
 
-
-
-public interface ParallelQueueEntry
-{
-    Object getParallelQueueLineId();
+public interface ParallelQueueEntry {
+	Object getParallelQueueLineId();
 }

@@ -184,7 +184,8 @@ public class Win32SendInput {
 			}
 			inputs.dwFlags = type == SWT.KeyUp ? OS.KEYEVENTF_KEYUP : 0;
 			int hHeap = OS.GetProcessHeap();
-			int pInputs = OS.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
+			int pInputs = OS
+					.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
 			OS.MoveMemory(pInputs, new int[] { OS.INPUT_KEYBOARD }, 4);
 			OS.MoveMemory(pInputs + 4, inputs, KEYBDINPUT.sizeof);
 			boolean result = OS.SendInput(1, pInputs, INPUT.sizeof) != 0;
@@ -222,8 +223,10 @@ public class Win32SendInput {
 						break;
 					case SWT.SCROLL_LINE:
 						int[] value = new int[1];
-						OS.SystemParametersInfo(OS.SPI_GETWHEELSCROLLLINES, 0, value, 0);
-						inputs.mouseData = event.count * OS.WHEEL_DELTA / value[0];
+						OS.SystemParametersInfo(OS.SPI_GETWHEELSCROLLLINES, 0,
+								value, 0);
+						inputs.mouseData = event.count * OS.WHEEL_DELTA
+								/ value[0];
 						break;
 					default:
 						return false;
@@ -231,25 +234,30 @@ public class Win32SendInput {
 				} else {
 					switch (event.button) {
 					case 1:
-						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_LEFTDOWN : OS.MOUSEEVENTF_LEFTUP;
+						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_LEFTDOWN
+								: OS.MOUSEEVENTF_LEFTUP;
 						break;
 					case 2:
-						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_MIDDLEDOWN : OS.MOUSEEVENTF_MIDDLEUP;
+						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_MIDDLEDOWN
+								: OS.MOUSEEVENTF_MIDDLEUP;
 						break;
 					case 3:
-						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_RIGHTDOWN : OS.MOUSEEVENTF_RIGHTUP;
+						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_RIGHTDOWN
+								: OS.MOUSEEVENTF_RIGHTUP;
 						break;
 					case 4: {
 						if (OS.WIN32_VERSION < OS.VERSION(5, 0))
 							return false;
-						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_XDOWN : OS.MOUSEEVENTF_XUP;
+						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_XDOWN
+								: OS.MOUSEEVENTF_XUP;
 						inputs.mouseData = OS.XBUTTON1;
 						break;
 					}
 					case 5: {
 						if (OS.WIN32_VERSION < OS.VERSION(5, 0))
 							return false;
-						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_XDOWN : OS.MOUSEEVENTF_XUP;
+						inputs.dwFlags = type == SWT.MouseDown ? OS.MOUSEEVENTF_XDOWN
+								: OS.MOUSEEVENTF_XUP;
 						inputs.mouseData = OS.XBUTTON2;
 						break;
 					}
@@ -259,7 +267,8 @@ public class Win32SendInput {
 				}
 			}
 			int hHeap = OS.GetProcessHeap();
-			int pInputs = OS.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
+			int pInputs = OS
+					.HeapAlloc(hHeap, OS.HEAP_ZERO_MEMORY, INPUT.sizeof);
 			OS.MoveMemory(pInputs, new int[] { OS.INPUT_MOUSE }, 4);
 			OS.MoveMemory(pInputs + 4, inputs, MOUSEINPUT.sizeof);
 			boolean result = OS.SendInput(1, pInputs, INPUT.sizeof) != 0;
@@ -301,24 +310,43 @@ public class Win32SendInput {
 			// {OS.VK_MBUTTON, SWT.BUTTON3},
 			// {OS.VK_RBUTTON, SWT.BUTTON2},
 			/* Non-Numeric Keypad Keys */
-			{ OS.VK_UP, SWT.ARROW_UP }, { OS.VK_DOWN, SWT.ARROW_DOWN }, { OS.VK_LEFT, SWT.ARROW_LEFT }, { OS.VK_RIGHT, SWT.ARROW_RIGHT }, { OS.VK_PRIOR, SWT.PAGE_UP }, { OS.VK_NEXT, SWT.PAGE_DOWN }, { OS.VK_HOME, SWT.HOME }, { OS.VK_END, SWT.END },
+			{ OS.VK_UP, SWT.ARROW_UP }, { OS.VK_DOWN, SWT.ARROW_DOWN },
+			{ OS.VK_LEFT, SWT.ARROW_LEFT }, { OS.VK_RIGHT, SWT.ARROW_RIGHT },
+			{ OS.VK_PRIOR, SWT.PAGE_UP }, { OS.VK_NEXT, SWT.PAGE_DOWN },
+			{ OS.VK_HOME, SWT.HOME }, { OS.VK_END, SWT.END },
 			{ OS.VK_INSERT, SWT.INSERT },
 
 			/* Virtual and Ascii Keys */
-			{ OS.VK_BACK, SWT.BS }, { OS.VK_RETURN, SWT.CR }, { OS.VK_DELETE, SWT.DEL }, { OS.VK_ESCAPE, SWT.ESC }, { OS.VK_RETURN, SWT.LF }, { OS.VK_TAB, SWT.TAB },
+			{ OS.VK_BACK, SWT.BS }, { OS.VK_RETURN, SWT.CR },
+			{ OS.VK_DELETE, SWT.DEL }, { OS.VK_ESCAPE, SWT.ESC },
+			{ OS.VK_RETURN, SWT.LF }, { OS.VK_TAB, SWT.TAB },
 
 			/* Functions Keys */
-			{ OS.VK_F1, SWT.F1 }, { OS.VK_F2, SWT.F2 }, { OS.VK_F3, SWT.F3 }, { OS.VK_F4, SWT.F4 }, { OS.VK_F5, SWT.F5 }, { OS.VK_F6, SWT.F6 }, { OS.VK_F7, SWT.F7 }, { OS.VK_F8, SWT.F8 }, { OS.VK_F9, SWT.F9 }, { OS.VK_F10, SWT.F10 },
-			{ OS.VK_F11, SWT.F11 }, { OS.VK_F12, SWT.F12 }, { OS.VK_F13, SWT.F13 }, { OS.VK_F14, SWT.F14 }, { OS.VK_F15, SWT.F15 },
+			{ OS.VK_F1, SWT.F1 }, { OS.VK_F2, SWT.F2 }, { OS.VK_F3, SWT.F3 },
+			{ OS.VK_F4, SWT.F4 }, { OS.VK_F5, SWT.F5 }, { OS.VK_F6, SWT.F6 },
+			{ OS.VK_F7, SWT.F7 }, { OS.VK_F8, SWT.F8 }, { OS.VK_F9, SWT.F9 },
+			{ OS.VK_F10, SWT.F10 }, { OS.VK_F11, SWT.F11 },
+			{ OS.VK_F12, SWT.F12 }, { OS.VK_F13, SWT.F13 },
+			{ OS.VK_F14, SWT.F14 }, { OS.VK_F15, SWT.F15 },
 
 			/* Numeric Keypad Keys */
-			{ OS.VK_MULTIPLY, SWT.KEYPAD_MULTIPLY }, { OS.VK_ADD, SWT.KEYPAD_ADD }, { OS.VK_RETURN, SWT.KEYPAD_CR }, { OS.VK_SUBTRACT, SWT.KEYPAD_SUBTRACT }, { OS.VK_DECIMAL, SWT.KEYPAD_DECIMAL }, { OS.VK_DIVIDE, SWT.KEYPAD_DIVIDE },
-			{ OS.VK_NUMPAD0, SWT.KEYPAD_0 }, { OS.VK_NUMPAD1, SWT.KEYPAD_1 }, { OS.VK_NUMPAD2, SWT.KEYPAD_2 }, { OS.VK_NUMPAD3, SWT.KEYPAD_3 }, { OS.VK_NUMPAD4, SWT.KEYPAD_4 }, { OS.VK_NUMPAD5, SWT.KEYPAD_5 }, { OS.VK_NUMPAD6, SWT.KEYPAD_6 },
-			{ OS.VK_NUMPAD7, SWT.KEYPAD_7 }, { OS.VK_NUMPAD8, SWT.KEYPAD_8 }, { OS.VK_NUMPAD9, SWT.KEYPAD_9 },
+			{ OS.VK_MULTIPLY, SWT.KEYPAD_MULTIPLY },
+			{ OS.VK_ADD, SWT.KEYPAD_ADD }, { OS.VK_RETURN, SWT.KEYPAD_CR },
+			{ OS.VK_SUBTRACT, SWT.KEYPAD_SUBTRACT },
+			{ OS.VK_DECIMAL, SWT.KEYPAD_DECIMAL },
+			{ OS.VK_DIVIDE, SWT.KEYPAD_DIVIDE },
+			{ OS.VK_NUMPAD0, SWT.KEYPAD_0 }, { OS.VK_NUMPAD1, SWT.KEYPAD_1 },
+			{ OS.VK_NUMPAD2, SWT.KEYPAD_2 }, { OS.VK_NUMPAD3, SWT.KEYPAD_3 },
+			{ OS.VK_NUMPAD4, SWT.KEYPAD_4 }, { OS.VK_NUMPAD5, SWT.KEYPAD_5 },
+			{ OS.VK_NUMPAD6, SWT.KEYPAD_6 }, { OS.VK_NUMPAD7, SWT.KEYPAD_7 },
+			{ OS.VK_NUMPAD8, SWT.KEYPAD_8 },
+			{ OS.VK_NUMPAD9, SWT.KEYPAD_9 },
 			// {OS.VK_????, SWT.KEYPAD_EQUAL},
 
 			/* Other keys */
-			{ OS.VK_CAPITAL, SWT.CAPS_LOCK }, { OS.VK_NUMLOCK, SWT.NUM_LOCK }, { OS.VK_SCROLL, SWT.SCROLL_LOCK }, { OS.VK_PAUSE, SWT.PAUSE }, { OS.VK_CANCEL, SWT.BREAK }, { OS.VK_SNAPSHOT, SWT.PRINT_SCREEN },
+			{ OS.VK_CAPITAL, SWT.CAPS_LOCK }, { OS.VK_NUMLOCK, SWT.NUM_LOCK },
+			{ OS.VK_SCROLL, SWT.SCROLL_LOCK }, { OS.VK_PAUSE, SWT.PAUSE },
+			{ OS.VK_CANCEL, SWT.BREAK }, { OS.VK_SNAPSHOT, SWT.PRINT_SCREEN },
 	// {OS.VK_????, SWT.HELP},
 
 	};

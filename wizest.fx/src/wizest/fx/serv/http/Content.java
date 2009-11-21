@@ -10,18 +10,18 @@ import java.io.InputStream;
  * @author wizest
  */
 public interface Content {
-    /*
-     * text/html; charset=iso-8859-1 text/plain; charset=iso-8859-1
-     * application/octet-stream
-     */
-    String getContentType();
+	/*
+	 * text/html; charset=iso-8859-1 text/plain; charset=iso-8859-1
+	 * application/octet-stream
+	 */
+	String getContentType();
 
-    /**
-     * @return -1 if unknown
-     */
-    long length();
+	/**
+	 * @return -1 if unknown
+	 */
+	long length();
 
-    InputStream getInputStream() throws IOException;
+	InputStream getInputStream() throws IOException;
 
-    void release();
+	void release();
 }

@@ -14,7 +14,8 @@ import wizest.fx.util.GenericContext;
 public class ServiceContext extends GenericContext implements Context {
 	private SocketChannel ch;
 
-	public void init(ServerContext sc, SocketChannel ch) throws ServiceException {
+	public void init(ServerContext sc, SocketChannel ch)
+			throws ServiceException {
 		setParent(sc);
 		this.ch = ch;
 	}

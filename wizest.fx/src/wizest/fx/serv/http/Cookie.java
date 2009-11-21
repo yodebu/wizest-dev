@@ -19,7 +19,8 @@ public class Cookie {
 	private String path; // may null
 	private String domain; // may null
 	private boolean secure;
-	private static SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z", Locale.US);
+	private static SimpleDateFormat sdf = new SimpleDateFormat(
+			"EEE, d MMM yyyy HH:mm:ss Z", Locale.US);
 
 	public Cookie(String name, String value) {
 		this.name = name;
@@ -57,6 +58,10 @@ public class Cookie {
 	}
 
 	public String makeSetCookieString() {
-		return name + "=" + value + ((expire == null) ? "" : "; expires=" + sdf.format(expire)) + ((path == null) ? "" : "; path=" + path) + ((secure) ? "; secure" : "") + ((domain == null) ? "" : "; domain=" + domain);
+		return name + "=" + value
+				+ ((expire == null) ? "" : "; expires=" + sdf.format(expire))
+				+ ((path == null) ? "" : "; path=" + path)
+				+ ((secure) ? "; secure" : "")
+				+ ((domain == null) ? "" : "; domain=" + domain);
 	}
 }

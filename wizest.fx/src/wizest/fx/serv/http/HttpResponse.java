@@ -80,9 +80,11 @@ public class HttpResponse {
 				if (content != null) {
 					// System.out.println(content.getContentType());
 					// System.out.println(content.length());
-					cb.put("Content-Type: ").put(content.getContentType()).put(CRLF);
+					cb.put("Content-Type: ").put(content.getContentType()).put(
+							CRLF);
 					if (content.length() >= 0)
-						cb.put("Content-Length: ").put(Long.toString(content.length())).put(CRLF);
+						cb.put("Content-Length: ").put(
+								Long.toString(content.length())).put(CRLF);
 				}
 				cb.put(CRLF);
 				break;
@@ -139,9 +141,11 @@ public class HttpResponse {
 	public void send(File f, boolean inline) throws IOException {
 		// web browser에서 다른 이름으로 저장할 때 원이름이 보이게...
 		if (inline)
-			addHeader("Content-Disposition", "inline; filename=\"" + new String(f.getName().getBytes(), "ISO-8859-1") + "\"");
+			addHeader("Content-Disposition", "inline; filename=\""
+					+ new String(f.getName().getBytes(), "ISO-8859-1") + "\"");
 		else
-			addHeader("Content-Disposition", "attachment; filename=\"" + new String(f.getName().getBytes(), "ISO-8859-1") + "\"");
+			addHeader("Content-Disposition", "attachment; filename=\""
+					+ new String(f.getName().getBytes(), "ISO-8859-1") + "\"");
 		send(new FileDataSource(f));
 	}
 
@@ -200,9 +204,11 @@ class StringContent implements Content {
 
 	public String getContentType() {
 		if (htmlString)
-			return charset == null ? "text/html" : "text/html; charset=" + charset;
+			return charset == null ? "text/html" : "text/html; charset="
+					+ charset;
 		else
-			return charset == null ? "text/plain" : "text/plain; charset=" + charset;
+			return charset == null ? "text/plain" : "text/plain; charset="
+					+ charset;
 	}
 
 	public long length() {

@@ -15,7 +15,6 @@ public abstract class HttpService implements Service {
 		return HttpServiceContext.class;
 	}
 
-	
 	public final void doService(ServiceContext context) throws ServiceException {
 		// try {
 		doService((HttpServiceContext) context);
@@ -31,5 +30,6 @@ public abstract class HttpService implements Service {
 		// }
 	}
 
-	public abstract void doService(HttpServiceContext context) throws ServiceException;
+	public abstract void doService(HttpServiceContext context)
+			throws ServiceException;
 }

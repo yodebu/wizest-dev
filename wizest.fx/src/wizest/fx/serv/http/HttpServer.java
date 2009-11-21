@@ -13,26 +13,25 @@ import wizest.fx.session.SimpleSessionManagerFactory;
  * @author wizest
  */
 public class HttpServer extends Server {
-    private SessionManager sessionManager;
+	private SessionManager sessionManager;
 
-    public HttpServer(InetSocketAddress socketAddress, HttpService svc) {
-        super(socketAddress, svc);
-        this.sessionManager = SimpleSessionManagerFactory.createFactory().createManager("session-manager@http-server-fx");
-    }
+	public HttpServer(InetSocketAddress socketAddress, HttpService svc) {
+		super(socketAddress, svc);
+		this.sessionManager = SimpleSessionManagerFactory.createFactory()
+				.createManager("session-manager@http-server-fx");
+	}
 
-    
-    public void startup() {
-        sessionManager.begin();
-        super.startup();
-    }
+	public void startup() {
+		sessionManager.begin();
+		super.startup();
+	}
 
-  
-    public void shutdown() {
-        super.shutdown();
-        sessionManager.end();
-    }
+	public void shutdown() {
+		super.shutdown();
+		sessionManager.end();
+	}
 
-    protected SessionManager getSessionManager() {
-        return this.sessionManager;
-    }
+	protected SessionManager getSessionManager() {
+		return this.sessionManager;
+	}
 }

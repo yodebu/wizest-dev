@@ -33,9 +33,9 @@ public class Server implements Runnable {
 	// private Context externalContext;
 
 	public Server(InetSocketAddress socketAddress, Service svc/*
-																 * , Context
-																 * externalContext
-																 */) {
+															 * , Context
+															 * externalContext
+															 */) {
 		this.socketAddress = socketAddress;
 		// this.externalContext = externalContext;
 		this.service = svc;
@@ -78,7 +78,8 @@ public class Server implements Runnable {
 				}
 			}
 		} catch (ClosedByInterruptException ie) {
-			log.info("server interrupted: " + socketAddress + ", exception=" + ie.toString());
+			log.info("server interrupted: " + socketAddress + ", exception="
+					+ ie.toString());
 		} catch (IOException e) {
 			log.warning(e.getMessage() + e);
 		}

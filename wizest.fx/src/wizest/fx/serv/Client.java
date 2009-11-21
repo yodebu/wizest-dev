@@ -27,6 +27,7 @@ public abstract class Client {
 		os.close();
 	}
 
-	public abstract void service(InputStream is, OutputStream os) throws IOException;
+	public abstract void service(InputStream is, OutputStream os)
+			throws IOException;
 
 }

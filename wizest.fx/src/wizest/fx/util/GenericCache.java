@@ -5,8 +5,6 @@ import java.util.Map;
 
 //import org.apache.commons.collections.map.LRUMap;
 
-
-
 public class GenericCache {
 	private ICache cache;
 
