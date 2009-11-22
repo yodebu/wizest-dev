@@ -105,7 +105,7 @@ public class HttpResponse {
 		ByteBuffer buff = makeHeaders(code, content);
 		os.write(buff.array());
 		if (content != null)
-			StreamUtils.copy(content.getInputStream(), os, true);
+			StreamUtils.copy(content.getInputStream(), os, true, false);
 	}
 
 	public void send(Content content) throws IOException {
