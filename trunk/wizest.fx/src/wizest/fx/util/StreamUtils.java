@@ -26,29 +26,12 @@ public class StreamUtils {
 	 * @throws IOException
 	 */
 	public static void copy(InputStream is, OutputStream os) throws IOException {
-		copy(is, os, true);
-	}
-
-	public static void copyUntilEmptyInput(InputStream is, OutputStream os,
-			final boolean closeStreams) throws IOException {
-		BufferedInputStream in = new BufferedInputStream(is);
-		BufferedOutputStream out = new BufferedOutputStream(os);
-		byte[] buff = new byte[8192];
-		for (;;) {
-			int read = in.read(buff);
-			if (read <= 0)
-				break;
-			out.write(buff, 0, read);
-		}
-		out.flush();
-		if (closeStreams) {
-			out.close();
-			in.close();
-		}
+		copy(is, os, true, false);
 	}
 
 	public static void copy(InputStream is, OutputStream os,
-			final boolean closeStreams) throws IOException {
+			final boolean closeStreams, boolean copyUntilEmptyInput)
+			throws IOException {
 		if (is instanceof FileInputStream) {
 			if (os instanceof FileOutputStream) {
 				FileInputStream fis = (FileInputStream) is;
@@ -90,8 +73,11 @@ public class StreamUtils {
 			byte[] buff = new byte[8192];
 			for (;;) {
 				int read = in.read(buff);
-				if (read < 0)
+				if (copyUntilEmptyInput && read <= 0)
 					break;
+				else if (read < 0)
+					break;
+
 				out.write(buff, 0, read);
 			}
 			out.flush();
@@ -104,7 +90,7 @@ public class StreamUtils {
 
 	public static byte[] toByteArray(InputStream is) throws IOException {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		copy(is, os, false);
+		copy(is, os, false, true);
 		os.close();
 		return os.toByteArray();
 	}

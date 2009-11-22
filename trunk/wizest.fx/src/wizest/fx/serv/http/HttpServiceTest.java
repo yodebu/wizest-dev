@@ -28,7 +28,7 @@ public class HttpServiceTest {
 					System.out.println("Input Body:");
 					InputStream is = c.getInputStream();
 					ByteArrayOutputStream os = new ByteArrayOutputStream();
-					StreamUtils.copyUntilEmptyInput(is, os, false);
+					StreamUtils.copy(is, os, false, true);
 					System.out.println(new String(os.toByteArray(), "UTF-8"));
 
 					// Cookie[] cs = c.getHttpRequest().getCookie();
