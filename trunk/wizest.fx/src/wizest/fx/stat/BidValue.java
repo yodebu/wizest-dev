@@ -14,7 +14,7 @@ public class BidValue {
 
 	public int updateValue(int bidPrice, long remain) {
 		long d;
-		switch (1) {
+		switch (2) {
 		case 1: // TYPE1
 			if (p == bidPrice)
 				d = remain - r;
