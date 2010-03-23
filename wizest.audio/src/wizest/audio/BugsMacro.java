@@ -9,8 +9,8 @@ import org.eclipse.swt.SWT;
 
 import wizest.fx.util.ScreenCapture;
 import wizest.fx.util.Shell;
+import wizest.fx.util.SimpleClipboard;
 import wizest.fx.util.win32.Macro;
-import wizest.fx.util.win32.SimpleClipboard;
 import wizest.fx.util.win32.WindowInfo;
 import wizest.fx.util.win32.WindowUtil;
 
