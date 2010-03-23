@@ -35,8 +35,8 @@ public class BugsRecorder {
 		String workDir = "./out";
 		String prefix = "";
 
-		System.out.println("Bugs Recorder v1.0");
-		System.out.println("by Sanghoon Kim (http://blog.naver.com/wizest)");
+		System.out.print  ("Bugs Recorder v1.0.1");
+		System.out.println(" to my lovely Hyewon from your Sanghoon.");
 		System.out.println("");
 
 		// help
